@@ -5,7 +5,7 @@ export default function Listing() {
     return (
         <>
             <Head>
-                <title>Test listing</title>
+                <title>Proptory listing</title>
             </Head>
             <div className="text-white">Listing</div>
         </>

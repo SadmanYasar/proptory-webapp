@@ -5,6 +5,7 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import logo from '../public/logo_proptory/icon_only/color_with_background.jpg';
+import { setSearch, useStateValue } from '@/state';
 // import { useAuthState } from 'react-firebase-hooks/auth';
 // import { auth } from '../utils/firebase';
 
@@ -63,13 +64,25 @@ export default function Nav() {
 }
 
 function SearchBar() {
+    const [_, dispatch] = useStateValue();
+    const [searchVal, setSearchVal] = useState('');
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearchVal(value);
+        dispatch(setSearch({
+            searchVal: value
+        }));
+
+    }
+
     return (
         <label className="relative block max-md:py-4 max-md:w-full md:w-6/12">
             <span className="sr-only">Search</span>
             <span className="absolute inset-y-0 left-0 flex items-center pl-2">
                 <AiOutlineSearch className='w-5 h-5 fill-slate-400' />
             </span>
-            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-xl py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" placeholder="Search for listings" type="text" name="search" />
+            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-xl py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-slate-400 focus:ring-1 sm:text-sm text-slate-800" placeholder="Search for listings" type="text" name="search" value={searchVal} onChange={onChange} />
             {/* <ul>
                  {(!user) && (
                      <Link href={'/auth/login'} legacyBehavior>
