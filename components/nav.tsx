@@ -71,7 +71,7 @@ function SearchBar() {
         const value = e.target.value;
         setSearchVal(value);
         dispatch(setSearch({
-            searchVal: value
+            searchVal: value.trim()
         }));
 
     }
