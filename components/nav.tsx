@@ -15,7 +15,6 @@ export default function Nav() {
     const [{ user }, dispatch] = useStateValue();
 
     const router = useRouter();
-    console.log(router.asPath);
 
     // hide nav on login screen
     if (router.asPath === '/') {

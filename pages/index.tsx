@@ -28,6 +28,7 @@ export default function Home() {
   )
 }
 
+// Wrap inputs in form
 function LoginPage() {
   const router = useRouter();
   const [_, dispatch] = useStateValue();
@@ -72,6 +73,10 @@ function LoginPage() {
             <div className='w-full py-4 bg-pink-650 rounded-lg text-center text-xl text-white' onClick={changeToProfileRoute}>Login as agent</div>
           </>}
           {!show && <>
+            <label className="relative block max-md:py-4 w-full">
+              <span className="sr-only">FullName</span>
+              <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Full Name" type="text" name="fullname" />
+            </label>
             <label className="relative block max-md:py-4 w-full">
               <span className="sr-only">Username</span>
               <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Username" type="text" name="username" />

@@ -3,6 +3,7 @@ import Layout from '@/components/layout';
 import { useStateValue } from '@/state';
 import Head from 'next/head';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 interface Listing {
@@ -185,17 +186,17 @@ const mockData: Listing[] = [
     }
 ]
 
-interface RoomInfo {
+export interface RoomInfo {
     bathroomCount: number;
     bedroomCount: number;
 }
-interface Listing2 {
+export interface Listing2 {
     id: string;
     name: string;
     description: string;
     created: string;
     address: {
-        streetAddressLines: string[];
+        streetAddress: string[];
     }
     roomInfo: RoomInfo;
     price: number;
@@ -203,12 +204,12 @@ interface Listing2 {
 
 const mockData2: Listing2[] = [
     {
-        "id": "zxaRzMEw2kg",
+        "id": "UzuL32m7Drr",
         "name": "MXCAGMPT",
         "description": "Mock Description",
         "created": "2022-03-25T12:14:24Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "Jalan Perimbun 27/11",
                 "591 Damansara SA"
             ]
@@ -225,7 +226,7 @@ const mockData2: Listing2[] = [
         "description": "B-06-04 The Academia @ South City Plaza",
         "created": "2022-07-19T05:40:52Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "Jalan Serdang Raya"
             ]
         },
@@ -241,7 +242,7 @@ const mockData2: Listing2[] = [
         "description": "L32-1(S) Hill10 Residence",
         "created": "2022-07-02T03:34:32Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "Persiaran Multimedia"
             ]
         },
@@ -257,7 +258,7 @@ const mockData2: Listing2[] = [
         "description": "",
         "created": "2022-03-12T09:26:20Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "2-32 Jalan Klang Lama",
                 "Taman Shanghai"
             ]
@@ -274,7 +275,7 @@ const mockData2: Listing2[] = [
         "description": "MR1-08-04 Sri Acappella Serviced Apartments",
         "created": "2022-07-05T06:37:51Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "1 Jalan Lompat Tinggi 13/33"
             ]
         },
@@ -290,7 +291,7 @@ const mockData2: Listing2[] = [
         "description": "",
         "created": "2022-05-09T03:53:34Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "Maju Expressway"
             ]
         },
@@ -306,7 +307,7 @@ const mockData2: Listing2[] = [
         "description": "",
         "created": "2022-08-13T11:59:16Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
             ]
         },
         roomInfo: {
@@ -321,7 +322,7 @@ const mockData2: Listing2[] = [
         "description": "",
         "created": "2022-04-14T07:52:29Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "1 Jalan PJS 8/9",
                 "Bandar Sunway"
             ]
@@ -338,7 +339,7 @@ const mockData2: Listing2[] = [
         "description": "Mutiara Ville",
         "created": "2022-07-14T11:04:34Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
                 "Jalan Tanpa Nama",
                 "Cyberjaya"
             ]
@@ -355,7 +356,7 @@ const mockData2: Listing2[] = [
         "description": "C-12-05 (Koi Kinrara Service Suite)",
         "created": "2022-07-23T07:46:52Z",
         "address": {
-            "streetAddressLines": [
+            "streetAddress": [
             ]
         },
         roomInfo: {
@@ -392,11 +393,13 @@ interface CardProps {
     data: Listing2[];
 }
 const Card = ({ data }: CardProps) => {
+    const router = useRouter();
+
     return (
         <div className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
             {data?.map(({ id, name, description, address, price, roomInfo }) => {
                 return (
-                    <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2'>
+                    <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2' onClick={() => router.push(`/listings/${id}`)}>
                         <div className="w-full h-full relative rounded-t-md bg-pink-200">
                             {/* <Image
                                 src={'/assets/listingImg.jpg'}
@@ -408,7 +411,7 @@ const Card = ({ data }: CardProps) => {
                                 className="rounded-l-md"
                             /> */}
                             <div className='w-full h-full flex flex-col items-center justify-center'>
-                                {address?.streetAddressLines?.map((a, i) =>
+                                {address?.streetAddress?.map((a, i) =>
                                     <div key={i} className='text-2xl'>
                                         {a}
                                     </div>)}
