@@ -23,7 +23,7 @@ export default function Nav() {
     }
 
     return (
-        <div className='bg-pink-650 w-full sticky top-0'>
+        <div className='bg-pink-650 w-full sticky top-0 z-50'>
             <nav className='py-5 mx-14 text-white'>
                 {/* Tablet/Desktop Navbar */}
                 <div className='w-full max-md:hidden flex justify-between items-center'>
