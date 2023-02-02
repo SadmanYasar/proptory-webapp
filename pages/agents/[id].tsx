@@ -383,12 +383,22 @@ export default function AgentProfile() {
                 <title>Agent Profile</title>
             </Head>
             <div className='text-black text-3xl py-4 px-12'>{loggedIn ? 'Your Listings' : ''}</div>
-            <div className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
-                {mockData2.map(({ id, name, description, address, price, roomInfo }) => {
-                    return (
-                        <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2'>
-                            <div className="w-full h-full relative rounded-t-md bg-pink-200">
-                                {/* <Image
+            <Card data={mockData2} />
+        </>
+    )
+}
+
+interface CardProps {
+    data: Listing2[];
+}
+const Card = ({ data }: CardProps) => {
+    return (
+        <div className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
+            {data?.map(({ id, name, description, address, price, roomInfo }) => {
+                return (
+                    <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2'>
+                        <div className="w-full h-full relative rounded-t-md bg-pink-200">
+                            {/* <Image
                                 src={'/assets/listingImg.jpg'}
                                 alt="listing-image"
                                 fill
@@ -397,29 +407,27 @@ export default function AgentProfile() {
                                 }}
                                 className="rounded-l-md"
                             /> */}
-                                <div className='w-full h-full flex flex-col items-center justify-center'>
-                                    {address.streetAddressLines.map((a, i) =>
-                                        <div key={i} className='text-2xl'>
-                                            {a}
-                                        </div>)}
-                                </div>
-                            </div>
-                            <div className='w-full h-full flex flex-col mx-4 my-4 space-y-4 text-lg'>
-                                <div className='text-2xl font-bold'>RM{price}</div>
-                                <div>{name}</div>
-                                <div className="w-[250px]">
-                                    <div className='truncate'>{description}</div>
-                                </div>
-                                <div className='flex flex-row space-x-10'>
-                                    <div>bath: {roomInfo.bathroomCount}</div>
-                                    <div>bed: {roomInfo.bedroomCount}</div>
-                                </div>
+                            <div className='w-full h-full flex flex-col items-center justify-center'>
+                                {address?.streetAddressLines?.map((a, i) =>
+                                    <div key={i} className='text-2xl'>
+                                        {a}
+                                    </div>)}
                             </div>
                         </div>
-                    )
-                })}
-            </div>
-
-        </>
+                        <div className='w-full h-full flex flex-col mx-4 my-4 space-y-4 text-lg'>
+                            <div className='text-2xl font-bold'>RM{price}</div>
+                            <div>{name}</div>
+                            <div className="w-[250px]">
+                                <div className='truncate'>{description}</div>
+                            </div>
+                            <div className='flex flex-row space-x-10'>
+                                <div>bath: {roomInfo?.bathroomCount}</div>
+                                <div>bed: {roomInfo?.bedroomCount}</div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
     )
 }
