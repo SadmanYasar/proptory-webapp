@@ -12,6 +12,7 @@ import { setSearch, useStateValue } from '@/state';
 export default function Nav() {
     // const [user, loading, error] = useAuthState(auth);
     const [toggled, setToggled] = useState(false);
+    const [{ user }, dispatch] = useStateValue();
 
     const router = useRouter();
     console.log(router.asPath);
@@ -27,24 +28,27 @@ export default function Nav() {
                 {/* Tablet/Desktop Navbar */}
                 <div className='w-full max-md:hidden flex justify-between items-center'>
                     <img
-                        referrerPolicy="no-referrer"
-                        className="w-12 h-12"
+                        referrerPolicy='no-referrer'
+                        className='w-12 h-12'
                         src={logo.src}
-                        alt="avatar"
+                        alt='avatar'
                     />
                     <SearchBar />
-                    <Link href={'/'}>
+                    <Link href={'/'} className={!user?.token ? '' : 'hidden'}>
                         Login as agent
+                    </Link>
+                    <Link href={'/'} className={user?.token ? '' : 'hidden'}>
+                        Logout
                     </Link>
                 </div>
 
                 {/*  Mobile Navbar */}
                 <div className='w-full md:hidden flex justify-between items-center'>
                     <img
-                        referrerPolicy="no-referrer"
-                        className="w-12 h-12"
+                        referrerPolicy='no-referrer'
+                        className='w-12 h-12'
                         src={logo.src}
-                        alt="avatar"
+                        alt='avatar'
                     />
                     <HiMenuAlt3 className='fill-white w-12 h-12' onClick={() => setToggled(!toggled)} />
                 </div>
@@ -70,19 +74,16 @@ function SearchBar() {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchVal(value);
-        dispatch(setSearch({
-            searchVal: value.trim()
-        }));
-
+        dispatch(setSearch(value.trim()));
     }
 
     return (
-        <label className="relative block max-md:py-4 max-md:w-full md:w-6/12">
-            <span className="sr-only">Search</span>
-            <span className="absolute inset-y-0 left-0 flex items-center pl-2">
+        <label className='relative block max-md:py-4 max-md:w-full md:w-6/12'>
+            <span className='sr-only'>Search</span>
+            <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
                 <AiOutlineSearch className='w-5 h-5 fill-slate-400' />
             </span>
-            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-xl py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-slate-400 focus:ring-1 sm:text-sm text-slate-800" placeholder="Search for listings" type="text" name="search" value={searchVal} onChange={onChange} />
+            <input className='placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-xl py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-slate-400 focus:ring-1 sm:text-sm text-slate-800' placeholder='Search for listings' type='text' name='search' value={searchVal} onChange={onChange} />
             {/* <ul>
                  {(!user) && (
                      <Link href={'/auth/login'} legacyBehavior>
@@ -96,10 +97,10 @@ function SearchBar() {
                      <div>
                          <Link href={'/dashboard'}>
                              <img
-                                 referrerPolicy="no-referrer"
-                                 className="w-12 rounded-full"
+                                 referrerPolicy='no-referrer'
+                                 className='w-12 rounded-full'
                                  src={user.photoURL}
-                                 alt="avatar"
+                                 alt='avatar'
                              />
                          </Link>
                      </div>

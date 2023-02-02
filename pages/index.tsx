@@ -2,6 +2,7 @@
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import router, { useRouter } from 'next/router'
+import { removeUser, setUser, useStateValue } from '@/state'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,12 +29,19 @@ export default function Home() {
 
 function LoginPage() {
   const router = useRouter();
+  const [_, dispatch] = useStateValue();
 
   const changeToProfileRoute = () => {
+    dispatch(setUser({
+      name: 'TestAgent',
+      token: '123',
+      userName: 'Test Agent'
+    }))
     router.push('/agents/1');
   }
 
   const changeToListingsRoute = () => {
+    dispatch(removeUser());
     router.push('/listings');
   }
 
