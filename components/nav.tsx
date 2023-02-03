@@ -5,29 +5,12 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import logo from '../public/logo_proptory/icon_only/color_with_background.jpg';
-import { removeNotification, setSearch, useStateValue } from '@/state';
+import { setSearch, useStateValue } from '@/state';
+import Notification from './notification';
 
 const routesToFilter = [
     '/',
 ]
-
-function Notification() {
-    const [{ notification }, dispatch] = useStateValue();
-
-    const clearNotification = () => {
-        dispatch(removeNotification());
-    }
-
-    if (!notification.message) {
-        return null;
-    }
-
-    return (
-        <div onClick={clearNotification} className={`w-full py-4 px-4 text-xl text-center ${notification.type === 'success' ? 'bg-green-400' : 'bg-red-400'}`}>
-            {notification.message}
-        </div>
-    )
-}
 
 export default function Nav() {
     // const [user, loading, error] = useAuthState(auth);
