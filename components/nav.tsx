@@ -5,24 +5,44 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import logo from '../public/logo_proptory/icon_only/color_with_background.jpg';
-import { setSearch, useStateValue } from '@/state';
-// import { useAuthState } from 'react-firebase-hooks/auth';
-// import { auth } from '../utils/firebase';
+import { removeNotification, setSearch, useStateValue } from '@/state';
 
-export default function Nav() {
-    // const [user, loading, error] = useAuthState(auth);
-    const [toggled, setToggled] = useState(false);
-    const [{ user }, dispatch] = useStateValue();
+const routesToFilter = [
+    '/',
+]
 
-    const router = useRouter();
+function Notification() {
+    const [{ notification }, dispatch] = useStateValue();
 
-    // hide nav on login screen
-    if (router.asPath === '/') {
+    const clearNotification = () => {
+        dispatch(removeNotification());
+    }
+
+    if (!notification.message) {
         return null;
     }
 
     return (
-        <div className='bg-pink-650 w-full sticky top-0 z-50'>
+        <div onClick={clearNotification} className={`w-full py-4 px-4 text-xl text-center ${notification.type === 'success' ? 'bg-green-400' : 'bg-red-400'}`}>
+            {notification.message}
+        </div>
+    )
+}
+
+export default function Nav() {
+    // const [user, loading, error] = useAuthState(auth);
+    const [toggled, setToggled] = useState(false);
+    const [{ user, notification }, dispatch] = useStateValue();
+
+    const router = useRouter();
+
+    // hide nav on login screen
+    if (routesToFilter.includes(router.asPath)) {
+        return null;
+    }
+
+    return (
+        <div className='bg-pink-650 w-full sticky top-0 z-40'>
             <nav className='py-5 mx-14 text-white'>
                 {/* Tablet/Desktop Navbar */}
                 <div className='w-full max-md:hidden flex justify-between items-center'>
@@ -61,8 +81,8 @@ export default function Nav() {
                         </Link>
                     </div>}
             </nav>
+            <Notification />
         </div>
-
     );
 }
 

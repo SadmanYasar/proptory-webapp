@@ -11,7 +11,9 @@ export default function Listing() {
             <Head>
                 <title>Proptory listing 3D view</title>
             </Head>
-            <iframe className="w-full h-full aspect-video" src={`https://my.matterport.com/show/?m=${id}`} allowFullScreen frameBorder={0}></iframe>
+            <div className="w-full h-full z-50 fixed top-0 flex flex-row items-center justify-center">
+            <iframe className="w-full h-full aspect-video border-0" src={`https://my.matterport.com/show/?m=${id}`} allowFullScreen></iframe>
+            </div>
         </>
     )
 }

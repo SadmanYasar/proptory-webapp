@@ -5,6 +5,10 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { AiFillCloseCircle } from 'react-icons/ai';
+import { IoIosAddCircle } from 'react-icons/io';
+import { MdContentCopy } from 'react-icons/md';
+import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, TelegramShareButton, TelegramIcon } from 'react-share';
 
 interface Listing {
     id: string;
@@ -394,43 +398,80 @@ interface CardProps {
 }
 const Card = ({ data }: CardProps) => {
     const router = useRouter();
+    const [show, setShow] = useState(false);
 
     return (
-        <div className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
-            {data?.map(({ id, name, description, address, price, roomInfo }) => {
-                return (
-                    <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2' onClick={() => router.push(`/listings/${id}`)}>
-                        <div className="w-full h-full relative rounded-t-md bg-pink-200">
-                            {/* <Image
-                                src={'/assets/listingImg.jpg'}
-                                alt="listing-image"
-                                fill
-                                style={{
-                                    objectFit: 'cover'
-                                }}
-                                className="rounded-l-md"
-                            /> */}
-                            <div className='w-full h-full flex flex-col items-center justify-center'>
-                                {address?.streetAddress?.map((a, i) =>
-                                    <div key={i} className='text-2xl'>
+        <>
+            <div className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
+                {data?.map(({ id, name, description, address, price, roomInfo }) => {
+                    return (
+                        <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2' onClick={() => router.push(`/listings/${id}`)}>
+                            <div className="w-full h-full relative rounded-t-md bg-pink-200">
+                                {/* <Image
+                    src={'/assets/listingImg.jpg'}
+                    alt="listing-image"
+                    fill
+                    style={{
+                        objectFit: 'cover'
+                    }}
+                    className="rounded-l-md"
+                /> */}
+                                <div className='w-full h-full flex flex-col items-center justify-center'>
+                                    {address?.streetAddress?.map((a, i) => <div key={i} className='text-2xl'>
                                         {a}
                                     </div>)}
+                                </div>
+                            </div>
+                            <div className='w-full h-full flex flex-col mx-4 my-4 space-y-4 text-lg'>
+                                <div className='text-2xl font-bold'>RM{price}</div>
+                                <div>{name}</div>
+                                <div className="w-[250px]">
+                                    <div className='truncate'>{description}</div>
+                                </div>
+                                <div className='flex flex-row space-x-10'>
+                                    <div>🛁 {roomInfo?.bathroomCount}</div>
+                                    <div>🛏️ {roomInfo?.bedroomCount}</div>
+                                </div>
                             </div>
                         </div>
-                        <div className='w-full h-full flex flex-col mx-4 my-4 space-y-4 text-lg'>
-                            <div className='text-2xl font-bold'>RM{price}</div>
-                            <div>{name}</div>
-                            <div className="w-[250px]">
-                                <div className='truncate'>{description}</div>
-                            </div>
-                            <div className='flex flex-row space-x-10'>
-                                <div>bath: {roomInfo?.bathroomCount}</div>
-                                <div>bed: {roomInfo?.bedroomCount}</div>
-                            </div>
-                        </div>
+                    );
+                })}
+            </div>
+            <div className='z-50 w-full h-full px-4 py-4 pointer-events-none fixed top-0 flex justify-end items-end'>
+                <IoIosAddCircle className='w-20 h-20 pointer-events-auto' onClick={() => setShow(true)} />
+            </div>
+            {show &&
+                <div className="w-full h-full fixed backdrop-blur-sm shadow-lg z-50 top-0 flex flex-col items-center justify-center">
+                    <div className="max-md:w-full md:w-3/6 bg-white shadow-2xl px-4 py-4 space-y-4 rounded-md overflow-auto">
+                        <div className='w-full py-4 text-center text-2xl font-bold text-gray-500'>Add a listing</div>
+                        <label className="relative block max-md:py-4 w-full">
+                            <span className="sr-only">Matterport Room Id</span>
+                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Matterport Room ID" type="text" name="matterport-room-id" />
+                        </label>
+                        <label className="relative block max-md:py-4 w-full">
+                            <span className="sr-only">Name</span>
+                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Name of apartment" type="text" name="name" />
+                        </label>
+                        <label className="relative block max-md:py-4 w-full">
+                            <span className="sr-only">Description</span>
+                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Description" type="text" name="description" />
+                        </label>
+                        <label className="relative block max-md:py-4 w-full">
+                            <span className="sr-only">Bathrooms</span>
+                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="How many bathrooms?" type="text" name="bathrooms" />
+                        </label>
+                        <label className="relative block max-md:py-4 w-full">
+                            <span className="sr-only">Bedrooms</span>
+                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="How many bedrooms?" type="text" name="bedrooms" />
+                        </label>
+                        <label className="relative block max-md:py-4 w-full">
+                            <span className="sr-only">Price</span>
+                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Price" type="text" name="price" />
+                        </label>
+                        <div className='w-full py-4 bg-pink-650 rounded-lg text-center text-xl text-white' onClick={() => setShow(false)}>Submit</div>
+                        <div className='w-full py-4 bg-white rounded-lg text-center text-xl text-gray-500 border border-gray-400' onClick={() => setShow(false)}>Cancel</div>
                     </div>
-                )
-            })}
-        </div>
+                </div>}
+        </>
     )
 }

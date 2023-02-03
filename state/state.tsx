@@ -4,7 +4,7 @@ import { Action } from './reducer'
 
 export type NotificationType = 'warning' | 'error' | 'success' | 'info'
 export type Notification = {
-    message: string,
+    message: string | null,
     type: NotificationType
 }
 
