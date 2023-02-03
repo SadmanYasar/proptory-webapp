@@ -1,4 +1,5 @@
-import { useStateValue, removeUser } from "@/state";
+import { useStateValue, setNotification } from "@/state";
+import { removeFromStorage, setStorage } from "@/utils/storage";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { NextRouter } from "next/router";
 import { loginSchema } from "./auth";
@@ -9,15 +10,37 @@ interface FormProps {
 
 const LoginForm = ({ router }: FormProps) => {
     const [_, dispatch] = useStateValue();
+    const contentType = 'application/json';
 
-    const login = (values: { username: string, password: string }) => {
-        dispatch(removeUser());
-        fetch('/api/auth/signup', {
-            // headers: {
-            //     ''
-            // }
-        })
-        router.push('/agents/1');
+    const login = async (values: { username: string, password: string }) => {
+        removeFromStorage('proptory-token');
+
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    Accept: contentType,
+                    'Content-Type': contentType,
+                },
+                body: JSON.stringify({
+                    ...values
+                })
+            });
+
+            // Throw error with status code in case Fetch API req failed
+            if (!response.ok) {
+                throw new Error(response.status.toString());
+            }
+
+            const data = await response.json();
+            console.log(data);
+
+            setStorage('proptory-token', data.value);
+            router.push(`/agents/${data.id}`);
+        } catch (error) {
+            console.log(error);
+            dispatch(setNotification({ message: 'Failed to login', type: 'error' }));
+        }
     }
 
     return (

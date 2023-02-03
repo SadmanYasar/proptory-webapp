@@ -1,4 +1,4 @@
-import { useStateValue, removeUser } from "@/state";
+import { useStateValue } from "@/state";
 import { setNotification } from "@/state/";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Dispatch, SetStateAction } from "react";
@@ -20,7 +20,7 @@ const SignUpForm = ({ setShow }: SignUpProps) => {
     const contentType = 'application/json';
 
     const signUp = async (values: SignupInputs) => {
-        dispatch(removeUser());
+        localStorage.removeItem('proptory-token');
 
         try {
             console.log(values);
@@ -80,24 +80,7 @@ const SignUpForm = ({ setShow }: SignUpProps) => {
                     </Form>
                 )}
             </Formik>
-            {/* <label className="relative block max-md:py-4 w-full">
-                <span className="sr-only">FullName</span>
-                <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Full Name" type="text" name="fullname" />
-            </label>
-            <label className="relative block max-md:py-4 w-full">
-                <span className="sr-only">Phone Number</span>
-                <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Phone Number" type="text" name="phonenumber" />
-            </label>
-            <label className="relative block max-md:py-4 w-full">
-                <span className="sr-only">Username</span>
-                <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Username" type="text" name="username" />
-            </label>
-            <label className="relative block max-md:py-4 w-full">
-                <span className="sr-only">Password</span>
-                <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Password" type="password" name="password" />
-            </label>
-            <input className='w-full py-4 bg-pink-650 rounded-lg text-center text-xl text-white' type={'button'}>Signup</input>
-         */}</>
+        </>
     )
 }
 

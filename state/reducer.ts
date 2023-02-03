@@ -1,4 +1,4 @@
-import { State, User, Notification } from './state'
+import { State, Notification } from './state'
 
 // type Notification = Pick<State, 'message' | 'type'>
 // type Search = Pick<State, 'searchVal'>
@@ -15,13 +15,13 @@ export type Action =
         type: 'SET_SEARCH';
         payload: string;
     }
-    | {
-        type: 'SET_USER';
-        payload: User;
-    }
-    | {
-        type: 'REMOVE_USER';
-    }
+// | {
+//     type: 'SET_TOKEN';
+//     payload: string;
+// }
+// | {
+//     type: 'REMOVE_TOKEN';
+// }
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -43,17 +43,17 @@ export const reducer = (state: State, action: Action): State => {
                 searchVal: action.payload
             }
 
-        case 'SET_USER':
-            return {
-                ...state,
-                user: action.payload
-            }
+        // case 'SET_TOKEN':
+        //     return {
+        //         ...state,
+        //         token: action.payload
+        //     }
 
-        case 'REMOVE_USER':
-            return {
-                ...state,
-                user: null
-            }
+        // case 'REMOVE_TOKEN':
+        //     return {
+        //         ...state,
+        //         token: null
+        //     }
 
         default:
             return state
@@ -80,15 +80,15 @@ export const setSearch = (data: string): Action => {
     }
 }
 
-export const setUser = (data: User): Action => {
-    return {
-        type: 'SET_USER',
-        payload: data,
-    }
-}
+// export const setToken = (data: string): Action => {
+//     return {
+//         type: 'SET_TOKEN',
+//         payload: data,
+//     }
+// }
 
-export const removeUser = (): Action => {
-    return {
-        type: 'REMOVE_USER',
-    }
-}
+// export const removeToken = (): Action => {
+//     return {
+//         type: 'REMOVE_TOKEN',
+//     }
+// }

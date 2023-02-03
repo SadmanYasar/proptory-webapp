@@ -22,7 +22,6 @@ export default async function handler(
     await connectDb();
 
     try {
-
         const passwordHash = await bcrypt.hash(password, saltRounds);
         const agent = new Agent({ username, fullname, password: passwordHash, phone });
         await agent.save()

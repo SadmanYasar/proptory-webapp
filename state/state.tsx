@@ -8,22 +8,21 @@ export type Notification = {
     type: NotificationType
 }
 
-export type User = {
-    userName: String;
-    name: String;
-    token: String;
-}
+// export type User = {
+//     userName: String;
+//     name: String;
+//     token: String;
+// }
 
 export type State = {
     notification: Notification
     searchVal: string;
-    user?: User | null;
 }
 
 const initialState: State = {
     notification: {
         message: '',
-        type: 'success'
+        type: 'success',
     },
     searchVal: '',
 }
