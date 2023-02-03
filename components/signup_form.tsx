@@ -17,26 +17,37 @@ type SignupInputs = {
 const SignUpForm = ({ setShow }: SignUpProps) => {
     const [_, dispatch] = useStateValue();
 
+    const contentType = 'application/json';
+
     const signUp = async (values: SignupInputs) => {
         dispatch(removeUser());
-        try {
-            const response = await fetch('/api/auth/signup', {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
 
+        try {
+            console.log(values);
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    Accept: contentType,
+                    'Content-Type': contentType,
+                },
                 body: JSON.stringify({
                     ...values
                 })
             });
 
+            // Throw error with status code in case Fetch API req failed
+            if (!response.ok) {
+                throw new Error(response.status.toString());
+            }
+
             const data = await response.json();
             console.log(data);
+            setShow(true);
+
         } catch (error) {
+            console.log(error);
             dispatch(setNotification({ message: 'Failed to sign up', type: 'error' }));
         }
-
-        setShow(true);
     }
 
     return (

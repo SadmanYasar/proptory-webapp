@@ -10,7 +10,6 @@ const schema = new Schema({
     password: {
         type: String,
         required: true,
-        unique: true,
         minlength: 5
     },
     fullname: {
@@ -21,6 +20,7 @@ const schema = new Schema({
     phone: {
         type: String,
         required: true,
+        unique: true,
         length: 13
     },
     listings: [

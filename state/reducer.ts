@@ -28,7 +28,7 @@ export const reducer = (state: State, action: Action): State => {
         case 'SET_NOTIFICATION':
             return {
                 ...state,
-                ...action.payload
+                notification: { ...action.payload }
             }
 
         case 'REMOVE_NOTIFICATION':

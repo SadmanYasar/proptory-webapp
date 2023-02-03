@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { useStateValue, setUser, removeUser } from "@/state";
+import { useStateValue, setUser, removeUser, removeNotification } from "@/state";
 import router, { NextRouter, useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import LoginForm from "./login_form";
 import SignUpForm from "./signup_form";
+import Notification from "./notification";
 
 export const loginSchema = Yup.object().shape({
     username: Yup.string().required('Required').trim(),
@@ -22,8 +23,10 @@ export const signUpSchema = Yup.object().shape({
 export function AuthPage() {
     const router = useRouter();
     const [show, setShow] = useState(true);
+    const [_, dispatch] = useStateValue();
 
     const changeToListingsRoute = () => {
+        dispatch(removeNotification());
         router.push('/agents/1');
     }
 
@@ -40,6 +43,7 @@ export function AuthPage() {
                         <div className={`border w-2/4 ${show ? 'border-pink-650 bg-pink-650 text-white' : 'bg-white border-gray-300 text-gray-400'} rounded-l-lg py-4 px-10`} onClick={() => setShow(!show)}>Login</div>
                         <div className={`border w-2/4 ${!show ? 'border-pink-650 bg-pink-650 text-white' : 'bg-white border-gray-300 text-gray-400'} rounded-r-lg py-4 px-10`} onClick={() => setShow(!show)}>Signup</div>
                     </div>
+                    <Notification />
                     {show && <LoginForm router={router} />}
                     {!show && <SignUpForm setShow={setShow} />}
                     <div className='w-full text-center text-lg text-pink-650 font-bold'>OR</div>
