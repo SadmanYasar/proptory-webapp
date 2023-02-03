@@ -1,4 +1,5 @@
 import { useStateValue, removeUser } from "@/state";
+import { setNotification } from "@/state/";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Dispatch, SetStateAction } from "react";
 import { signUpSchema } from "./auth";
@@ -32,7 +33,7 @@ const SignUpForm = ({ setShow }: SignUpProps) => {
             const data = await response.json();
             console.log(data);
         } catch (error) {
-            console.log(error);
+            dispatch(setNotification({ message: 'Failed to sign up', type: 'error' }));
         }
 
         setShow(true);
