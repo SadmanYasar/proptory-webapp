@@ -17,12 +17,6 @@ const LoginForm = ({ router }: FormProps) => {
     const [_, dispatch] = useStateValue();
     const contentType = 'application/json';
 
-    // useEffect(() => {
-    //     if (getFromStorage('proptory-token')) {
-    //         router.push('/');
-    //     }
-    // }, [])
-
     const login = async (values: { username: string, password: string }) => {
         removeFromStorage('proptory-token');
         removeFromStorage('proptory-user');

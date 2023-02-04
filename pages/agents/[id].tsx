@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { IoIosAddCircle } from 'react-icons/io';
 import * as Yup from 'yup';
+import { ListingDetailed } from '../listings/[id]';
+import useSWR from 'swr';
 
 const addListingSchema = Yup.object().shape({
     matterportId: Yup.string().typeError('String is required').required('Required').min(5, 'Too Short!').trim(),
@@ -202,19 +204,17 @@ export interface RoomInfo {
     bathroomCount: number;
     bedroomCount: number;
 }
-export interface Listing2 {
-    id: string;
-    name: string;
-    description: string;
-    created: string;
-    address: {
-        streetAddress: string[];
-    }
-    roomInfo: RoomInfo;
-    price: number;
+export interface Agent {
+    data: Data;
 }
 
-const mockData2: Listing2[] = [
+interface Data {
+    id: string;
+    fullname: string;
+    listings: ListingDetailed[];
+}
+
+const mockData2 = [
     {
         "id": "UzuL32m7Drr",
         "name": "MXCAGMPT",
@@ -379,72 +379,100 @@ const mockData2: Listing2[] = [
     }
 ]
 
+export async function fetcher<JSON = any>(
+    input: RequestInfo,
+    init?: RequestInit
+): Promise<JSON> {
+    const res = await fetch(input, init)
+    return res.json()
+}
+
 export default function AgentProfile() {
     const [loggedIn, setLoggedIn] = useState(false);
+    const [page, setPage] = useState(1);
+    const [pagecount, setpagecount] = useState(0);
+    const [isLoading, setLoading] = useState(false);
+    // const [agent, setAgent] = useState<Agent | null>(null);
     const [{ searchVal }] = useStateValue();
+    const router = useRouter();
+    const { id } = router.query;
+    const { data: agent, error } = useSWR<Agent | null>(id ? `/api/agents/${id}?page=${page}` : null, id ? fetcher : null);
 
-    // check if loggedin
-    // if so, 
-    //      show 'Your listings'
-    //      show Edit option in each listing'
-    //      show add button
-    // else show '${Agentname}'s listings'
     useEffect(() => {
         if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
             setLoggedIn(true);
         }
-    }, []);
+    }, [loggedIn]);
 
+    // useEffect(() => {
+    //     const loadListings = async () => {
+    //         if (!router.isReady) return;
+    //         const response = await fetch(`/api/agents/${id}`, {
+    //             method: 'GET',
+    //             headers: {
+    //                 Accept: contentType,
+    //                 'Content-Type': contentType,
+    //             },
+    //         })
+    //         const jsonResponse = await response.json();
+    //         setAgent(jsonResponse.data);
+    //         console.log(jsonResponse);
+    //     }
+
+    //     loadListings();
+    // }, [router.isReady])
+
+    if (isLoading) return <p>Loading...</p>
+    if (!agent) return <p>No profile data</p>
+
+    console.log(agent);
 
     return (
         <>
             <Head>
                 <title>Agent Profile</title>
             </Head>
-            <div className='text-black text-3xl py-4 px-12'>{loggedIn ? 'Your Listings' : "Agent's listings"}</div>
-            <Card data={mockData2} />
+            <div className={`text-black text-3xl py-4 px-12 ${agent?.data?.fullname ? '' : 'hidden'}`}>{`${agent?.data?.fullname}'s listings`}</div>
+            {agent?.data?.listings?.map((listing) =>
+                <div key={listing.id} className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
+                    <Card data={listing} />
+                </div>
+            )}
             {loggedIn && <AddListingModal />}
         </>
     )
 }
 
 interface CardProps {
-    data: Listing2[];
+    data: ListingDetailed;
 }
-const Card = ({ data }: CardProps) => {
+const Card = ({ data: { id, name, address, price, description, bathrooms, bedrooms } }: CardProps) => {
     const router = useRouter();
 
     return (
         <>
-            <div className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
-                {data?.map(({ id, name, description, address, price, roomInfo }) => {
-                    return (
-                        <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2' onClick={() => router.push(`/listings/${id}`)}>
-                            <div className="w-full h-full relative rounded-t-md bg-pink-200">
-                                <div className='w-full h-full flex flex-col items-center justify-center'>
-                                    {address?.streetAddress?.map((a, i) => <div key={i} className='text-2xl'>
-                                        {a}
-                                    </div>)}
-                                </div>
-                            </div>
-                            <div className='w-full h-full flex flex-col mx-4 my-4 space-y-4 text-lg'>
-                                <div className='text-2xl font-bold'>RM{price}</div>
-                                <div>{name}</div>
-                                <div className="w-[250px]">
-                                    <div className='truncate'>{description}</div>
-                                </div>
-                                <div className='flex flex-row space-x-10'>
-                                    <div>🛁 {roomInfo?.bathroomCount}</div>
-                                    <div>🛏️ {roomInfo?.bedroomCount}</div>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+            <div className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2' onClick={() => router.push(`/listings/${id}`)}>
+                <div className="w-full h-full relative rounded-t-md bg-pink-200">
+                    <div className='w-full h-full flex flex-col items-center justify-center'>
+                        {address}
+                    </div>
+                </div>
+                <div className='w-full h-full flex flex-col mx-4 my-4 space-y-4 text-lg'>
+                    <div className='text-2xl font-bold'>RM{price}</div>
+                    <div>{name}</div>
+                    <div className="w-[250px]">
+                        <div className='truncate'>{description}</div>
+                    </div>
+                    <div className='flex flex-row space-x-10'>
+                        <div>🛁 {bathrooms}</div>
+                        <div>🛏️ {bedrooms}</div>
+                    </div>
+                </div>
             </div>
         </>
     )
 }
+
 const AddListingModal = () => {
     const [_, dispatch] = useStateValue();
     const router = useRouter();

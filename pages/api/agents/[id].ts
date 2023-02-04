@@ -16,17 +16,17 @@ export default async function handler(
     await connectDb();
 
     switch (method) {
-        case 'GET' /* Get a model by its ID */:
+        case 'GET' /* Get agent by its ID */:
             try {
-                const agent = await Agent.findById(id);
+                const agent = await Agent.findById(id).populate('listings', { name: 1, description: 1, address: 1, bathrooms: 1, bedrooms: 1, price: 1 });
                 if (!agent) {
                     return res.status(400).json({ success: false });
                 }
                 res.status(200).json({ success: true, data: agent });
             } catch (error) {
-                res.status(400).json({ success: false });
+                res.status(400).json({ error });
             }
-            break
+            break;
 
         case 'POST' /* Post a model by its ID */:
             let token;

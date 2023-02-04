@@ -37,6 +37,7 @@ export default function Nav() {
     const handleClick = () => {
         removeFromStorage('proptory-token');
         removeFromStorage('proptory-user');
+        setViewAsAgent(false);
         router.push('/');
     }
 

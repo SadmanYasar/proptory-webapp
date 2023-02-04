@@ -39,6 +39,14 @@ const schema = new Schema({
     }
 });
 
+schema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
+    },
+});
+
 const Listing = models.Listing || model('Listing', schema);
 
 export default Listing;

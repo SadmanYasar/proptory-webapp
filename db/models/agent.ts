@@ -31,6 +31,15 @@ const schema = new Schema({
     ]
 });
 
+schema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
+        delete returnedObject.password;
+    },
+});
+
 const Agent = models.Agent || model('Agent', schema);
 
 export default Agent;
