@@ -8,7 +8,8 @@ import { useEffect, useState } from 'react';
 import { IoIosAddCircle } from 'react-icons/io';
 import * as Yup from 'yup';
 import { ListingDetailed } from '../listings/[id]';
-import useSWR from 'swr';
+import useSWR, { KeyedMutator } from 'swr';
+import Agent from '@/db/models/agent';
 
 const addListingSchema = Yup.object().shape({
     matterportId: Yup.string().typeError('String is required').required('Required').min(5, 'Too Short!').trim(),
@@ -393,10 +394,11 @@ export default function AgentProfile() {
     const [pagecount, setpagecount] = useState(0);
     const [isLoading, setLoading] = useState(false);
     // const [agent, setAgent] = useState<Agent | null>(null);
-    const [{ searchVal }] = useStateValue();
+    const [{ searchVal }, dispatch] = useStateValue();
     const router = useRouter();
     const { id } = router.query;
-    const { data: agent, error } = useSWR<Agent | null>(id ? `/api/agents/${id}?page=${page}` : null, id ? fetcher : null);
+    const { data, error, mutate } = useSWR<Agent | null>(id ? `/api/agents/${id}?page=${page}` : null, id ? fetcher : null);
+    const contentType = 'application/json';
 
     useEffect(() => {
         if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
@@ -404,41 +406,57 @@ export default function AgentProfile() {
         }
     }, [loggedIn]);
 
-    // useEffect(() => {
-    //     const loadListings = async () => {
-    //         if (!router.isReady) return;
-    //         const response = await fetch(`/api/agents/${id}`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 Accept: contentType,
-    //                 'Content-Type': contentType,
-    //             },
-    //         })
-    //         const jsonResponse = await response.json();
-    //         setAgent(jsonResponse.data);
-    //         console.log(jsonResponse);
-    //     }
+    const addListing = async (values: any) => {
+        try {
+            const response = await fetch(`/api/agents/${getFromStorage('proptory-user')}`, {
+                method: 'POST',
+                headers: {
+                    Accept: contentType,
+                    'Content-Type': contentType,
+                    Authorization: `Bearer ${getFromStorage('proptory-token')}`
+                },
+                body: JSON.stringify({
+                    ...values
+                })
+            });
 
-    //     loadListings();
-    // }, [router.isReady])
+            // Throw error with status code in case Fetch API req failed
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
+            if (!response.ok) {
+                throw new Error(jsonResponse.error);
+            }
+
+            data && mutate({
+                ...data,
+                data: {
+                    ...data.data,
+                    listings: [...data?.data.listings, jsonResponse]
+                }
+            });
+            dispatch(setNotification({ message: `Successfully added ${values.name}`, type: 'success' }));
+        } catch (error: any) {
+            dispatch(setNotification({ message: 'Failed to add', type: 'error' }));
+        }
+    }
 
     if (isLoading) return <p>Loading...</p>
-    if (!agent) return <p>No profile data</p>
+    if (!data) return <p>No profile data</p>
 
-    console.log(agent);
+    console.log(data);
 
     return (
         <>
             <Head>
                 <title>Agent Profile</title>
             </Head>
-            <div className={`text-black text-3xl py-4 px-12 ${agent?.data?.fullname ? '' : 'hidden'}`}>{`${agent?.data?.fullname}'s listings`}</div>
-            {agent?.data?.listings?.map((listing) =>
-                <div key={listing.id} className='grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
-                    <Card data={listing} />
-                </div>
-            )}
-            {loggedIn && <AddListingModal />}
+            <div className={`text-black text-3xl py-4 px-12 ${data?.data?.fullname ? '' : 'hidden'}`}>{`${data?.data?.fullname}'s listings`}</div>
+            <div className='w-full grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
+                {data?.data?.listings?.map((listing) =>
+                    <Card key={listing.id} data={listing} />
+                )}
+            </div>
+            {loggedIn && <AddListingModal addListing={addListing} />}
         </>
     )
 }
@@ -473,39 +491,12 @@ const Card = ({ data: { id, name, address, price, description, bathrooms, bedroo
     )
 }
 
-const AddListingModal = () => {
-    const [_, dispatch] = useStateValue();
+interface ModalProps {
+    addListing: (values: any) => Promise<void>;
+}
+const AddListingModal = ({ addListing }: ModalProps) => {
     const router = useRouter();
     const [modalShow, setModalShow] = useState(false);
-    const contentType = 'application/json';
-
-    const submit = async (values: any) => {
-        try {
-            const response = await fetch(`/api/agents/${getFromStorage('proptory-user')}`, {
-                method: 'POST',
-                headers: {
-                    Accept: contentType,
-                    'Content-Type': contentType,
-                    Authorization: `Bearer ${getFromStorage('proptory-token')}`
-                },
-                body: JSON.stringify({
-                    ...values
-                })
-            });
-
-            // Throw error with status code in case Fetch API req failed
-            const data = await response.json();
-            console.log(data);
-            if (!response.ok) {
-                throw new Error(data.error);
-            }
-
-            dispatch(setNotification({ message: `Successfully added ${values.name}`, type: 'success' }));
-        } catch (error: any) {
-            dispatch(setNotification({ message: 'Failed to add', type: 'error' }));
-        }
-        setModalShow(false);
-    }
 
     return (
         <>
@@ -525,7 +516,10 @@ const AddListingModal = () => {
                             price: '',
                         }}
                         validationSchema={addListingSchema}
-                        onSubmit={(values) => submit(values)}
+                        onSubmit={(values) => {
+                            addListing(values);
+                            setModalShow(false);
+                        }}
                     >
                         {({ isSubmitting }) => (
                             <Form className="w-full space-y-4">
