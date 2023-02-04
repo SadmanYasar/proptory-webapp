@@ -58,7 +58,7 @@ export default function Listings() {
                 })}
             </div>
 
-            <footer className="w-full flex flex-row items-center justify-center space-x-4 py-4 px-4 font-bold max-md:text-md md:text-xl">
+            <footer className="w-full flex flex-row items-center justify-center space-x-4 py-4 px-4 max-md:text-md md:text-xl">
                 <button disabled={page === 1} onClick={handlePrevious}>
                     Previous
                 </button>
