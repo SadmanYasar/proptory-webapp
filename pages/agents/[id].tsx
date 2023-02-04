@@ -390,14 +390,12 @@ export async function fetcher<JSON = any>(
 
 export default function AgentProfile() {
     const [loggedIn, setLoggedIn] = useState(false);
-    const [page, setPage] = useState(1);
-    const [pagecount, setpagecount] = useState(0);
     const [isLoading, setLoading] = useState(false);
     // const [agent, setAgent] = useState<Agent | null>(null);
     const [{ searchVal }, dispatch] = useStateValue();
     const router = useRouter();
     const { id } = router.query;
-    const { data, error, mutate } = useSWR<Agent | null>(id ? `/api/agents/${id}?page=${page}` : null, id ? fetcher : null);
+    const { data, error, mutate } = useSWR<Agent | null>(id ? `/api/agents/${id}` : null, id ? fetcher : null);
     const contentType = 'application/json';
 
     useEffect(() => {
@@ -464,7 +462,7 @@ export default function AgentProfile() {
 interface CardProps {
     data: ListingDetailed;
 }
-const Card = ({ data: { id, name, address, price, description, bathrooms, bedrooms } }: CardProps) => {
+export const Card = ({ data: { id, name, address, price, description, bathrooms, bedrooms } }: CardProps) => {
     const router = useRouter();
 
     return (

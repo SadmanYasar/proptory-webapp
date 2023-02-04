@@ -13,7 +13,7 @@ export function AuthPage() {
 
     const changeToListingsRoute = () => {
         dispatch(removeNotification());
-        router.push('/agents/1');
+        router.push('/listings?page=1');
     }
 
     return (
