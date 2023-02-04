@@ -58,18 +58,18 @@ export default function Listings() {
                 })}
             </div>
 
-            <footer>
-                Page: {page}
-                <br />
-                Page count: {pageCount}
-                <br />
+            <footer className="w-full flex flex-row items-center justify-center space-x-4 py-4 px-4 font-bold max-md:text-md md:text-xl">
                 <button disabled={page === 1} onClick={handlePrevious}>
                     Previous
                 </button>
+                <div>
+                    Page {page} of {pageCount}
+                </div>
                 <button disabled={page === pageCount} onClick={handleNext}>
                     Next
                 </button>
-                <select
+
+                {/* <select
                     value={page}
                     onChange={(event) => {
                         setPage(Number(event.target.value));
@@ -80,7 +80,7 @@ export default function Listings() {
                         .map((_, index) => {
                             return <option key={index}>{index + 1}</option>;
                         })}
-                </select>
+                </select> */}
             </footer>
         </>
     );

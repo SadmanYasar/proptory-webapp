@@ -2,7 +2,7 @@ import connectDb from '@/db/connectDb';
 import Listing from '@/db/models/listing';
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 20;
 
 export default async function handler(
     req: NextApiRequest,
