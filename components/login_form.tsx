@@ -1,4 +1,4 @@
-import { useStateValue, setNotification } from "@/state";
+import { useStateValue, setNotification, login } from "@/state";
 import { getFromStorage, removeFromStorage, setStorage } from "@/utils/storage";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { NextRouter } from "next/router";
@@ -17,7 +17,7 @@ const LoginForm = ({ router }: FormProps) => {
     const [_, dispatch] = useStateValue();
     const contentType = 'application/json';
 
-    const login = async (values: { username: string, password: string }) => {
+    const agentLogin = async (values: { username: string, password: string }) => {
         removeFromStorage('proptory-token');
         removeFromStorage('proptory-user');
 
@@ -42,6 +42,7 @@ const LoginForm = ({ router }: FormProps) => {
 
             setStorage('proptory-token', data.value);
             setStorage('proptory-user', data.id);
+            dispatch(login());
             router.push(`/agents/${data.id}`);
         } catch (error) {
             console.log(error);
@@ -57,7 +58,7 @@ const LoginForm = ({ router }: FormProps) => {
                     password: ''
                 }}
                 validationSchema={loginSchema}
-                onSubmit={(values) => login(values)}
+                onSubmit={(values) => agentLogin(values)}
             >
                 {({ isSubmitting }) => (
                     <Form className="w-full space-y-4">

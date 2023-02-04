@@ -5,7 +5,7 @@ import { HiMenuAlt3 } from 'react-icons/hi';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useRouter } from 'next/router';
 import logo from '../public/logo_proptory/icon_only/color_with_background.jpg';
-import { setSearch, useStateValue } from '@/state';
+import { login, logout, setSearch, useStateValue } from '@/state';
 import Notification from './notification';
 import { getFromStorage, removeFromStorage } from '@/utils/storage';
 
@@ -16,14 +16,13 @@ const routesToFilter = [
 export default function Nav() {
     // const [user, loading, error] = useAuthState(auth);
     const [toggled, setToggled] = useState(false);
-    const [{ notification }, dispatch] = useStateValue();
-    const [viewAsAgent, setViewAsAgent] = useState(false);
+    const [{ notification, loggedIn }, dispatch] = useStateValue();
 
     useEffect(() => {
         if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
-            setViewAsAgent(true);
+            dispatch(login());
         } else {
-            setViewAsAgent(false);
+            dispatch(logout());
         }
     }, [])
 
@@ -35,9 +34,7 @@ export default function Nav() {
     }
 
     const handleClick = () => {
-        removeFromStorage('proptory-token');
-        removeFromStorage('proptory-user');
-        setViewAsAgent(false);
+        dispatch(logout());
         router.push('/');
     }
 
@@ -53,10 +50,10 @@ export default function Nav() {
                         alt='avatar'
                     />
                     <SearchBar />
-                    <div onClick={handleClick} className={!viewAsAgent ? '' : 'hidden'}>
+                    <div onClick={handleClick} className={!loggedIn ? '' : 'hidden'}>
                         Login as agent
                     </div>
-                    <div onClick={handleClick} className={viewAsAgent ? '' : 'hidden'}>
+                    <div onClick={handleClick} className={loggedIn ? '' : 'hidden'}>
                         Logout
                     </div>
                 </div>
@@ -76,10 +73,10 @@ export default function Nav() {
                 {toggled &&
                     <div className='w-full md:hidden flex flex-col justify-between'>
                         <SearchBar />
-                        <div onClick={handleClick} className={!viewAsAgent ? '' : 'hidden'}>
+                        <div onClick={handleClick} className={!loggedIn ? '' : 'hidden'}>
                             Login as agent
                         </div>
-                        <div onClick={handleClick} className={viewAsAgent ? '' : 'hidden'}>
+                        <div onClick={handleClick} className={loggedIn ? '' : 'hidden'}>
                             Logout
                         </div>
                     </div>}

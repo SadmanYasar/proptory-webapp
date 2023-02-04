@@ -17,6 +17,7 @@ export type Notification = {
 export type State = {
     notification: Notification
     searchVal: string;
+    loggedIn: boolean;
 }
 
 const initialState: State = {
@@ -25,6 +26,7 @@ const initialState: State = {
         type: 'success',
     },
     searchVal: '',
+    loggedIn: false,
 }
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([

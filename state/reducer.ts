@@ -1,3 +1,4 @@
+import { removeFromStorage } from '@/utils/storage';
 import { State, Notification } from './state'
 
 // type Notification = Pick<State, 'message' | 'type'>
@@ -15,13 +16,12 @@ export type Action =
         type: 'SET_SEARCH';
         payload: string;
     }
-// | {
-//     type: 'SET_TOKEN';
-//     payload: string;
-// }
-// | {
-//     type: 'REMOVE_TOKEN';
-// }
+    | {
+        type: 'LOGIN';
+    }
+    | {
+        type: 'LOGOUT';
+    }
 
 export const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -41,6 +41,18 @@ export const reducer = (state: State, action: Action): State => {
             return {
                 ...state,
                 searchVal: action.payload
+            }
+
+        case 'LOGIN':
+            return {
+                ...state,
+                loggedIn: true
+            }
+
+        case 'LOGOUT':
+            return {
+                ...state,
+                loggedIn: false
             }
 
         // case 'SET_TOKEN':
@@ -80,15 +92,16 @@ export const setSearch = (data: string): Action => {
     }
 }
 
-// export const setToken = (data: string): Action => {
-//     return {
-//         type: 'SET_TOKEN',
-//         payload: data,
-//     }
-// }
+export const login = (): Action => {
+    return {
+        type: 'LOGIN',
+    }
+}
 
-// export const removeToken = (): Action => {
-//     return {
-//         type: 'REMOVE_TOKEN',
-//     }
-// }
+export const logout = (): Action => {
+    removeFromStorage('proptory-token');
+    removeFromStorage('proptory-user');
+    return {
+        type: 'LOGOUT',
+    }
+}
