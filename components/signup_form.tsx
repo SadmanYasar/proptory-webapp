@@ -1,9 +1,16 @@
 import { useStateValue } from "@/state";
 import { setNotification } from "@/state/";
+import { removeFromStorage } from "@/utils/storage";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Dispatch, SetStateAction } from "react";
-import { signUpSchema } from "./auth";
+import * as Yup from 'yup';
 
+export const signUpSchema = Yup.object().shape({
+    fullname: Yup.string().required('Required').min(3, 'Too Short!').trim(),
+    phone: Yup.string().required('Required').length(13, 'Invalid Number').trim(),
+    username: Yup.string().required('Required').trim(),
+    password: Yup.string().required('Required').min(5, 'Too Short!').trim(),
+})
 interface SignUpProps {
     setShow: Dispatch<SetStateAction<boolean>>;
 }
@@ -20,7 +27,8 @@ const SignUpForm = ({ setShow }: SignUpProps) => {
     const contentType = 'application/json';
 
     const signUp = async (values: SignupInputs) => {
-        localStorage.removeItem('proptory-token');
+        removeFromStorage('proptory-token');
+        removeFromStorage('proptory-user');
 
         try {
             console.log(values);

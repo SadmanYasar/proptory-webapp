@@ -2,22 +2,9 @@
 import { useStateValue, removeNotification } from "@/state";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import * as Yup from 'yup'
 import LoginForm from "./login_form";
 import SignUpForm from "./signup_form";
 import Notification from "./notification";
-
-export const loginSchema = Yup.object().shape({
-    username: Yup.string().required('Required').trim(),
-    password: Yup.string().required('Required').min(5, 'Too Short!').trim(),
-})
-
-export const signUpSchema = Yup.object().shape({
-    fullname: Yup.string().required('Required').min(3, 'Too Short!').trim(),
-    phone: Yup.string().required('Required').length(13, 'Invalid Number').trim(),
-    username: Yup.string().required('Required').trim(),
-    password: Yup.string().required('Required').min(5, 'Too Short!').trim(),
-})
 
 export function AuthPage() {
     const router = useRouter();

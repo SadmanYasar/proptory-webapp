@@ -7,7 +7,8 @@ const schema = new Schema({
     },
     matterportId: {
         type: String,
-        required: true
+        required: true,
+        minlength: 5
     },
     name: {
         type: String,
@@ -22,7 +23,7 @@ const schema = new Schema({
     address: {
         type: String,
         required: true,
-        minlength: 3
+        minlength: 5
     },
     bathrooms: {
         type: Number,

@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import logo from '../public/logo_proptory/icon_only/color_with_background.jpg';
 import { setSearch, useStateValue } from '@/state';
 import Notification from './notification';
-import { getFromStorage } from '@/utils/storage';
+import { getFromStorage, removeFromStorage } from '@/utils/storage';
 
 const routesToFilter = [
     '/',
@@ -20,7 +20,7 @@ export default function Nav() {
     const [viewAsAgent, setViewAsAgent] = useState(false);
 
     useEffect(() => {
-        if (getFromStorage('proptory-token')) {
+        if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
             setViewAsAgent(true);
         } else {
             setViewAsAgent(false);
@@ -35,7 +35,8 @@ export default function Nav() {
     }
 
     const handleClick = () => {
-        window?.localStorage.removeItem('proptory-token');
+        removeFromStorage('proptory-token');
+        removeFromStorage('proptory-user');
         router.push('/');
     }
 
@@ -51,10 +52,10 @@ export default function Nav() {
                         alt='avatar'
                     />
                     <SearchBar />
-                    <div onClick={handleClick} className={getFromStorage('proptory-token') ? '' : 'hidden'}>
+                    <div onClick={handleClick} className={!viewAsAgent ? '' : 'hidden'}>
                         Login as agent
                     </div>
-                    <div onClick={handleClick} className={getFromStorage('proptory-token') ? '' : 'hidden'}>
+                    <div onClick={handleClick} className={viewAsAgent ? '' : 'hidden'}>
                         Logout
                     </div>
                 </div>
@@ -74,9 +75,12 @@ export default function Nav() {
                 {toggled &&
                     <div className='w-full md:hidden flex flex-col justify-between'>
                         <SearchBar />
-                        <Link href={'/'}>
+                        <div onClick={handleClick} className={!viewAsAgent ? '' : 'hidden'}>
                             Login as agent
-                        </Link>
+                        </div>
+                        <div onClick={handleClick} className={viewAsAgent ? '' : 'hidden'}>
+                            Logout
+                        </div>
                     </div>}
             </nav>
             <Notification />

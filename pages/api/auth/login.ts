@@ -1,4 +1,4 @@
-import connectDb from '@/db/connectDb'
+import connectDb from '@/db/connectDb';
 import Agent from '@/db/models/agent';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
@@ -27,5 +27,5 @@ export default async function handler(
         id: foundAgent._id,
     }
 
-    res.status(200).json({ id: foundAgent._id, value: jwt.sign(agentForToken, process.env.JWT_SECRET!) });
+    res.status(200).json({ id: foundAgent._id, value: jwt.sign(agentForToken, process.env.JWT_SECRET!, { expiresIn: "7d" }) });
 }

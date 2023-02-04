@@ -1,5 +1,5 @@
 // IMPORTANT
-// TO ACCESS OTHER USERS LINKS, COMMERCIAL LICENSE IS REQUIRED
+// TO ACCESS OTHER LINKS, COMMERCIAL LICENSE IS REQUIRED
 
 // import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 // import { setContext } from '@apollo/client/link/context';

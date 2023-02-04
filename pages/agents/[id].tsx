@@ -1,14 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
-import Layout from '@/components/layout';
-import { useStateValue } from '@/state';
+import { setNotification, useStateValue } from '@/state';
+import { getFromStorage, removeFromStorage } from '@/utils/storage';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Head from 'next/head';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { AiFillCloseCircle } from 'react-icons/ai';
+import { useEffect, useState } from 'react';
 import { IoIosAddCircle } from 'react-icons/io';
-import { MdContentCopy } from 'react-icons/md';
-import { WhatsappShareButton, WhatsappIcon, FacebookShareButton, FacebookIcon, TelegramShareButton, TelegramIcon } from 'react-share';
+import * as Yup from 'yup';
+
+const addListingSchema = Yup.object().shape({
+    matterportId: Yup.string().typeError('String is required').required('Required').min(5, 'Too Short!').trim(),
+    name: Yup.string().typeError('String is required').required('Required').min(3, 'Too Short!').trim(),
+    description: Yup.string().typeError('String is required').required('Required').min(5, 'Too Short!').trim(),
+    address: Yup.string().typeError('String is required').required('Required').min(5, 'Too Short!').trim(),
+    bathrooms: Yup.number().typeError('Must be a positive number').required('Required').moreThan(0),
+    bedrooms: Yup.number().typeError('Must be a positive number').required('Required').moreThan(0),
+    price: Yup.number().typeError('Must be a positive number').required('Required').moreThan(0),
+})
 
 interface Listing {
     id: string;
@@ -372,7 +380,7 @@ const mockData2: Listing2[] = [
 ]
 
 export default function AgentProfile() {
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
     const [{ searchVal }] = useStateValue();
 
     // check if loggedin
@@ -381,14 +389,21 @@ export default function AgentProfile() {
     //      show Edit option in each listing'
     //      show add button
     // else show '${Agentname}'s listings'
+    useEffect(() => {
+        if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
+            setLoggedIn(true);
+        }
+    }, []);
+
 
     return (
         <>
             <Head>
                 <title>Agent Profile</title>
             </Head>
-            <div className='text-black text-3xl py-4 px-12'>{loggedIn ? 'Your Listings' : ''}</div>
+            <div className='text-black text-3xl py-4 px-12'>{loggedIn ? 'Your Listings' : "Agent's listings"}</div>
             <Card data={mockData2} />
+            {loggedIn && <AddListingModal />}
         </>
     )
 }
@@ -398,7 +413,6 @@ interface CardProps {
 }
 const Card = ({ data }: CardProps) => {
     const router = useRouter();
-    const [show, setShow] = useState(false);
 
     return (
         <>
@@ -407,15 +421,6 @@ const Card = ({ data }: CardProps) => {
                     return (
                         <div key={id} className='h-96 my-12 mx-12 shadow-lg rounded-md grid grid-rows-2' onClick={() => router.push(`/listings/${id}`)}>
                             <div className="w-full h-full relative rounded-t-md bg-pink-200">
-                                {/* <Image
-                    src={'/assets/listingImg.jpg'}
-                    alt="listing-image"
-                    fill
-                    style={{
-                        objectFit: 'cover'
-                    }}
-                    className="rounded-l-md"
-                /> */}
                                 <div className='w-full h-full flex flex-col items-center justify-center'>
                                     {address?.streetAddress?.map((a, i) => <div key={i} className='text-2xl'>
                                         {a}
@@ -437,41 +442,93 @@ const Card = ({ data }: CardProps) => {
                     );
                 })}
             </div>
+        </>
+    )
+}
+const AddListingModal = () => {
+    const [_, dispatch] = useStateValue();
+    const router = useRouter();
+    const [modalShow, setModalShow] = useState(false);
+    const contentType = 'application/json';
+
+    const submit = async (values: any) => {
+        try {
+            const response = await fetch(`/api/agents/${getFromStorage('proptory-user')}`, {
+                method: 'POST',
+                headers: {
+                    Accept: contentType,
+                    'Content-Type': contentType,
+                    Authorization: `Bearer ${getFromStorage('proptory-token')}`
+                },
+                body: JSON.stringify({
+                    ...values
+                })
+            });
+
+            // Throw error with status code in case Fetch API req failed
+            const data = await response.json();
+            console.log(data);
+            if (!response.ok) {
+                throw new Error(data.error);
+            }
+
+            dispatch(setNotification({ message: `Successfully added ${values.name}`, type: 'success' }));
+        } catch (error: any) {
+            dispatch(setNotification({ message: 'Failed to add', type: 'error' }));
+        }
+        setModalShow(false);
+    }
+
+    return (
+        <>
             <div className='z-50 w-full h-full px-4 py-4 pointer-events-none fixed top-0 flex justify-end items-end'>
-                <IoIosAddCircle className='w-20 h-20 pointer-events-auto' onClick={() => setShow(true)} />
+                <IoIosAddCircle className='w-20 h-20 pointer-events-auto' onClick={() => setModalShow(true)} />
             </div>
-            {show &&
-                <div className="w-full h-full fixed backdrop-blur-sm shadow-lg z-50 top-0 flex flex-col items-center justify-center">
-                    <div className="max-md:w-full md:w-3/6 bg-white shadow-2xl px-4 py-4 space-y-4 rounded-md overflow-auto">
-                        <div className='w-full py-4 text-center text-2xl font-bold text-gray-500'>Add a listing</div>
-                        <label className="relative block max-md:py-4 w-full">
-                            <span className="sr-only">Matterport Room Id</span>
-                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Matterport Room ID" type="text" name="matterport-room-id" />
-                        </label>
-                        <label className="relative block max-md:py-4 w-full">
-                            <span className="sr-only">Name</span>
-                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Name of apartment" type="text" name="name" />
-                        </label>
-                        <label className="relative block max-md:py-4 w-full">
-                            <span className="sr-only">Description</span>
-                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Description" type="text" name="description" />
-                        </label>
-                        <label className="relative block max-md:py-4 w-full">
-                            <span className="sr-only">Bathrooms</span>
-                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="How many bathrooms?" type="text" name="bathrooms" />
-                        </label>
-                        <label className="relative block max-md:py-4 w-full">
-                            <span className="sr-only">Bedrooms</span>
-                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="How many bedrooms?" type="text" name="bedrooms" />
-                        </label>
-                        <label className="relative block max-md:py-4 w-full">
-                            <span className="sr-only">Price</span>
-                            <input className="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-lg py-4 pl-4 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" placeholder="Price" type="text" name="price" />
-                        </label>
-                        <div className='w-full py-4 bg-pink-650 rounded-lg text-center text-xl text-white' onClick={() => setShow(false)}>Submit</div>
-                        <div className='w-full py-4 bg-white rounded-lg text-center text-xl text-gray-500 border border-gray-400' onClick={() => setShow(false)}>Cancel</div>
-                    </div>
-                </div>}
+            {modalShow && <div className="w-full h-full fixed backdrop-blur-sm shadow-lg z-50 top-0 flex flex-col items-center justify-center">
+                <div className="max-md:w-full md:w-3/6 bg-white shadow-2xl px-4 py-4 space-y-4 rounded-md overflow-auto">
+                    <Formik
+                        initialValues={{
+                            matterportId: '',
+                            name: '',
+                            address: '',
+                            description: '',
+                            bathrooms: '',
+                            bedrooms: '',
+                            price: '',
+                        }}
+                        validationSchema={addListingSchema}
+                        onSubmit={(values) => submit(values)}
+                    >
+                        {({ isSubmitting }) => (
+                            <Form className="w-full space-y-4">
+                                <Field type="text" name="matterportId" placeholder="Matterport Model ID" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
+                                <ErrorMessage name="matterportId" component="div" className="text-red-500 sm:text-sm md:text-xl" />
+
+                                <Field type="text" name="name" placeholder="Name of listing" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
+                                <ErrorMessage name="name" component="div" className="text-red-500 sm:text-sm md:text-xl" />
+
+                                <Field type="text" name="address" placeholder="Address" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
+                                <ErrorMessage name="address" component="div" className="text-red-500 sm:text-sm md:text-xl" />
+
+                                <Field type="text" name="description" placeholder="Description" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
+                                <ErrorMessage name="description" component="div" className="text-red-500 sm:text-sm md:text-xl" />
+
+                                <Field type="text" name="bathrooms" placeholder="How many bathrooms?" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
+                                <ErrorMessage name="bathrooms" component="div" className="text-red-500 sm:text-sm md:text-xl" />
+
+                                <Field type="text" name="bedrooms" placeholder="How many bedrooms?" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
+                                <ErrorMessage name="bedrooms" component="div" className="text-red-500 sm:text-sm md:text-xl" />
+
+                                <Field type="text" name="price" placeholder="Price" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
+                                <ErrorMessage name="price" component="div" className="text-red-500 sm:text-sm md:text-xl" />
+
+                                <button className='w-full py-4 bg-pink-650 rounded-lg text-center text-xl text-white' type={'submit'} disabled={isSubmitting}>Create</button>
+                                <button type='button' className='w-full py-4 bg-white rounded-lg text-center text-xl text-gray-500 border border-gray-400' onClick={() => setModalShow(false)}>Cancel</button>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+            </div>}
         </>
     )
 }

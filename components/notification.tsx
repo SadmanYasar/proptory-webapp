@@ -4,9 +4,6 @@ import { useEffect } from "react";
 export default function Notification() {
     const [{ notification }, dispatch] = useStateValue();
 
-    console.log(notification.message);
-
-
     const clearNotification = () => {
         dispatch(removeNotification());
     }
