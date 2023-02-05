@@ -4,6 +4,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { NextRouter } from "next/router";
 import { useEffect } from "react";
 import * as Yup from 'yup';
+import Button from "./button";
+import Input from "./input";
 
 const loginSchema = Yup.object().shape({
     username: Yup.string().required('Required').trim(),
@@ -13,11 +15,15 @@ interface FormProps {
     router: NextRouter;
 }
 
+interface LoginInputs {
+    username: string;
+    password: string;
+}
 const LoginForm = ({ router }: FormProps) => {
     const [_, dispatch] = useStateValue();
     const contentType = 'application/json';
 
-    const agentLogin = async (values: { username: string, password: string }) => {
+    const agentLogin = async (values: LoginInputs) => {
         removeFromStorage('proptory-token');
         removeFromStorage('proptory-user');
 
@@ -62,13 +68,9 @@ const LoginForm = ({ router }: FormProps) => {
             >
                 {({ isSubmitting }) => (
                     <Form className="w-full space-y-4">
-                        <Field type="text" name="username" placeholder="Username" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
-                        <ErrorMessage name="username" component="div" className="text-red-500 sm:text-sm md:text-xl" />
-
-                        <Field type="password" name="password" placeholder="Password" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
-                        <ErrorMessage name="password" component="div" className="text-red-500 sm:text-sm md:text-xl" />
-
-                        <button className='w-full py-4 bg-pink-650 rounded-lg text-center text-xl text-white' type={'submit'} disabled={isSubmitting}>Login</button>
+                        <Input type="text" name="username" placeholder="Username" />
+                        <Input type="password" name="password" placeholder="Password" />
+                        <Button type="submit" disabled={isSubmitting} text={'Login'} />
                     </Form>
                 )}
             </Formik>

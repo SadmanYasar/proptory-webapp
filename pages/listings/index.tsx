@@ -50,6 +50,7 @@ export default function Listings() {
 
     return (
         <>
+            <div className="md:text-3xl max-md:xl  mx-12 py-4">{data.pagination?.count} total listings</div>
             <div className='w-full grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
                 {data.items.map((item) => {
                     return (

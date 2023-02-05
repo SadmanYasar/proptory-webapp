@@ -15,7 +15,6 @@ export default async function handler(
     res: NextApiResponse
 ) {
     const { username, fullname, password, phone } = req.body;
-    const { method } = req;
 
     const saltRounds = 10;
 

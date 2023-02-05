@@ -48,13 +48,15 @@ export default function Nav() {
                         className='w-12 h-12'
                         src={logo.src}
                         alt='avatar'
+                        onClick={() => router.push('/listings?page=1')}
                     />
                     <SearchBar />
                     <div onClick={handleClick} className={!loggedIn ? '' : 'hidden'}>
                         Login as agent
                     </div>
-                    <div onClick={handleClick} className={loggedIn ? '' : 'hidden'}>
-                        Logout
+                    <div className={loggedIn ? 'flex flex-row space-x-4' : 'hidden'}>
+                        <div onClick={() => router.push(`/agents/${getFromStorage('proptory-user')}`)}>Profile</div>
+                        <div onClick={handleClick}>Logout</div>
                     </div>
                 </div>
 
