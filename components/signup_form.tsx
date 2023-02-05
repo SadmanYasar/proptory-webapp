@@ -4,6 +4,8 @@ import { removeFromStorage } from "@/utils/storage";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Dispatch, SetStateAction } from "react";
 import * as Yup from 'yup';
+import Button from "./button";
+import Input from "./input";
 
 export const signUpSchema = Yup.object().shape({
     fullname: Yup.string().required('Required').min(3, 'Too Short!').trim(),
@@ -72,19 +74,11 @@ const SignUpForm = ({ setShow }: SignUpProps) => {
             >
                 {({ isSubmitting }) => (
                     <Form className="w-full space-y-4">
-                        <Field type="text" name="fullname" placeholder="Full Name" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
-                        <ErrorMessage name="fullname" component="div" className="text-red-500 sm:text-sm md:text-xl" />
-
-                        <Field type="text" name="phone" placeholder="Phone Number" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
-                        <ErrorMessage name="phone" component="div" className="text-red-500 sm:text-sm md:text-xl" />
-
-                        <Field type="text" name="username" placeholder="Username" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
-                        <ErrorMessage name="username" component="div" className="text-red-500 sm:text-sm md:text-xl" />
-
-                        <Field type="password" name="password" placeholder="Password" className="relative block max-md:py-4 w-full placeholder:text-slate-400 bg-white border border-slate-300 rounded-lg py-4 pl-4 pr-3  shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm md:text-xl" />
-                        <ErrorMessage name="password" component="div" className="text-red-500 sm:text-sm md:text-xl" />
-
-                        <button className='w-full py-4 bg-pink-650 rounded-lg text-center text-xl text-white' type={'submit'} disabled={isSubmitting}>Signup</button>
+                        <Input type="text" name="fullname" placeholder="Full Name" />
+                        <Input type="text" name="phone" placeholder="Phone Number" />
+                        <Input type="text" name="username" placeholder="Username" />
+                        <Input type="password" name="password" placeholder="Password" />
+                        <Button type="submit" disabled={isSubmitting} text={"Signup"} />
                     </Form>
                 )}
             </Formik>
