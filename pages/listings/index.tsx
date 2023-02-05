@@ -3,7 +3,8 @@ import { ListingDetailed } from "./[id]";
 import useSWR from 'swr';
 import { useRouter } from "next/router";
 import { fetcher } from "@/utils/fetcher";
-import { Card } from "../agents/[id]";
+import Card from "@/components/card";
+import { useStateValue } from "@/state";
 
 interface Pagination {
     pagination: {
@@ -15,10 +16,10 @@ interface Pagination {
 
 export default function Listings() {
     const router = useRouter();
-
+    const [{ searchVal }, dispatch] = useStateValue();
     const [page, setPage] = useState(1);
     const [pageCount, setPageCount] = useState(0);
-    const { data, error } = useSWR<Pagination>(`/api/listings?page=${page}`, fetcher);
+    const { data, error } = useSWR<Pagination>(`/api/listings?page=${page}&search=${(searchVal.length === 0 || searchVal.length > 5) ? searchVal : ''}`, fetcher);
 
     useEffect(() => {
         if (data) {

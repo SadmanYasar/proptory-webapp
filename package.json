@@ -17,6 +17,7 @@
     "@types/react-dom": "18.0.10",
     "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.3",
+    "escape-string-regexp": "^5.0.0",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.6",
     "formik": "^2.2.9",

@@ -13,17 +13,17 @@ const schema = new Schema({
     name: {
         type: String,
         required: true,
-        minlength: 3
+        minlength: 5
     },
     description: {
         type: String,
         required: true,
-        minlength: 5
+        minlength: 10
     },
     address: {
         type: String,
         required: true,
-        minlength: 5
+        minlength: 10
     },
     bathrooms: {
         type: Number,

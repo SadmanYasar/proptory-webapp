@@ -51,8 +51,6 @@ export default function Listing() {
                 }
 
                 setListing(jsonResponse.data);
-                console.log(jsonResponse);
-                console.log(jsonResponse.data);
             } catch (error) {
                 router.push('/');
             }

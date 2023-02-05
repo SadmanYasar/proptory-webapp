@@ -1,6 +1,7 @@
 import connectDb from '@/db/connectDb';
 import Listing from '@/db/models/listing';
 import type { NextApiRequest, NextApiResponse } from 'next'
+import escapeStringRegexp from 'escape-string-regexp';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -9,9 +10,20 @@ export default async function handler(
     res: NextApiResponse
 ) {
     const page = (req.query.page) || 1;
+    const search = (req.query.search) || '';
+
+    const $regex = escapeStringRegexp(search.toString());
 
     // Put all your query params in here
-    const query = {};
+    let query;
+
+    if (search && search.length > 5) {
+        query = {
+            name: { $regex },
+        };
+    } else {
+        query = {};
+    }
 
     try {
         await connectDb();

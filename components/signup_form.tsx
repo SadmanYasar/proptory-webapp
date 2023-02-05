@@ -33,7 +33,6 @@ const SignUpForm = ({ setShow }: SignUpProps) => {
         removeFromStorage('proptory-user');
 
         try {
-            console.log(values);
             const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: {
@@ -51,7 +50,6 @@ const SignUpForm = ({ setShow }: SignUpProps) => {
             }
 
             const data = await response.json();
-            console.log(data);
             setShow(true);
 
         } catch (error) {
