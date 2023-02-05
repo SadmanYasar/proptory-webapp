@@ -1,9 +1,9 @@
-import Head from "next/head";
 import { useEffect, useState } from "react";
 import { ListingDetailed } from "./[id]";
 import useSWR from 'swr';
 import { useRouter } from "next/router";
-import { Card, fetcher } from "../agents/[id]";
+import { fetcher } from "@/utils/fetcher";
+import { Card } from "../agents/[id]";
 
 interface Pagination {
     pagination: {

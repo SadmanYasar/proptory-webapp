@@ -1,11 +1,11 @@
 import { useStateValue } from "@/state";
 import { setNotification } from "@/state/";
 import { removeFromStorage } from "@/utils/storage";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form } from "formik";
 import { Dispatch, SetStateAction } from "react";
 import * as Yup from 'yup';
-import Button from "./button";
-import Input from "./input";
+import Button from "./formInputs/button";
+import Input from "./formInputs/input";
 
 export const signUpSchema = Yup.object().shape({
     fullname: Yup.string().required('Required').min(3, 'Too Short!').trim(),

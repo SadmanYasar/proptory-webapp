@@ -10,8 +10,6 @@ import { MdContentCopy } from "react-icons/md"
 import { AiFillCloseCircle } from "react-icons/ai"
 import { BsShareFill } from "react-icons/bs"
 import Link from "next/link";
-// import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
-// import useSWR from 'swr'
 
 export interface ListingDetailed {
     id: string;

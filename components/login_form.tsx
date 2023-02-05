@@ -4,8 +4,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { NextRouter } from "next/router";
 import { useEffect } from "react";
 import * as Yup from 'yup';
-import Button from "./button";
-import Input from "./input";
+import Button from "./formInputs/button";
+import Input from "./formInputs/input";
 
 const loginSchema = Yup.object().shape({
     username: Yup.string().required('Required').trim(),
