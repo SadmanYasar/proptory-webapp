@@ -11,7 +11,6 @@ import { fetcher } from '@/utils/fetcher';
 import Card from '@/components/card';
 import AddListingModal from '@/components/add_listing_modal';
 
-
 export interface RoomInfo {
     bathroomCount: number;
     bedroomCount: number;

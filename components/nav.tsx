@@ -5,7 +5,8 @@ import { useRouter } from 'next/router';
 import logo from '../public/logo_proptory/icon_only/color_with_background.jpg';
 import { login, logout, setSearch, useStateValue } from '@/state';
 import Notification from './notification';
-import { getFromStorage, removeFromStorage } from '@/utils/storage';
+import { getFromStorage } from '@/utils/storage';
+import SearchBar from './searchBar';
 
 const routesToFilter = [
     '/',
@@ -14,7 +15,7 @@ const routesToFilter = [
 export default function Nav() {
     // const [user, loading, error] = useAuthState(auth);
     const [toggled, setToggled] = useState(false);
-    const [{ notification, loggedIn }, dispatch] = useStateValue();
+    const [{ loggedIn }, dispatch] = useStateValue();
 
     useEffect(() => {
         if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
@@ -46,7 +47,10 @@ export default function Nav() {
                         className='w-12 h-12'
                         src={logo.src}
                         alt='avatar'
-                        onClick={() => router.push('/listings?page=1')}
+                        onClick={() => {
+                            dispatch(setSearch(''))
+                            router.push('/listings')
+                        }}
                     />
                     <SearchBar />
                     <div onClick={handleClick} className={!loggedIn ? '' : 'hidden'}>
@@ -87,45 +91,4 @@ export default function Nav() {
             <Notification />
         </div>
     );
-}
-
-function SearchBar() {
-    const [{ searchVal }, dispatch] = useStateValue();
-    const [search, setSearchVal] = useState(searchVal);
-    const router = useRouter();
-
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setSearchVal(value);
-    }
-
-    const handleClick = () => {
-        if (router.pathname !== '/listings') {
-            router.push('/listings');
-        }
-        dispatch(setSearch(search.trim()));
-    }
-
-    return (
-        <div className='flex flex-row justify-around max-md:py-4 max-md:w-full md:w-6/12'>
-            <input className='placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-l-xl py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-slate-400 focus:ring-1 sm:text-sm text-slate-800' placeholder='Search for listings' type='text' name='search' value={search} onChange={onChange} />
-            <button onClick={handleClick} className='py-2 px-2 text-white bg-black rounded-r-xl'>
-                Search
-            </button>
-        </div>
-        // <label className='relative block max-md:py-4 max-md:w-full md:w-6/12'>
-        // <span className='sr-only'>Search</span>
-        // {/* <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
-        //     <AiOutlineSearch className='w-5 h-5 fill-slate-400' />
-        // </span> */}
-        // <input className='placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-xl py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-slate-400 focus:ring-1 sm:text-sm text-slate-800' placeholder='Search for listings' type='text' name='search' value={search} onChange={onChange} />
-        // <span className='absolute inset-y-0 h-10 right-0 flex items-center bg-gray-900 rounded-r-lg'>
-        //     {/* <AiOutlineSearch className='w-5 h-5 fill-slate-400' /> */}
-        //     <button className='py-2 px-2 text-white'>
-        //         Search
-        //     </button>
-        // </span>
-        // </label>
-
-    )
 }

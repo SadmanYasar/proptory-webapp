@@ -5,12 +5,17 @@ import { AuthPage } from '@/components/auth'
 import { getFromStorage } from '@/utils/storage'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { setSearch, useStateValue } from '@/state'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const [_, dispatch] = useStateValue();
+
   const router = useRouter();
   useEffect(() => {
+    dispatch(setSearch(''));
+
     if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
       router.push(`/agents/${getFromStorage('proptory-user')}`);
     }

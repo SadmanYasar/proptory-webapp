@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { fetcher } from "@/utils/fetcher";
 import Card from "@/components/card";
 import { useStateValue } from "@/state";
+import Head from "next/head";
 
 interface Pagination {
     pagination: {
@@ -51,7 +52,13 @@ export default function Listings() {
 
     return (
         <>
-            <div className="md:text-3xl max-md:xl  mx-12 py-4">{data.pagination?.count} total listings</div>
+            <Head>
+                <title>Listings</title>
+                <meta name="description" content="Listings" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <div className="md:text-3xl max-md:xl  mx-12 py-4">{searchVal ? `Search Results on '${searchVal}'` : `${data.pagination.count} Total Listings`}</div>
             <div className='w-full grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
                 {data.items.map((item) => {
                     return (
