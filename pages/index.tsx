@@ -19,6 +19,7 @@ export default function Home() {
     if (getFromStorage('proptory-token') && getFromStorage('proptory-user')) {
       router.push(`/agents/${getFromStorage('proptory-user')}`);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

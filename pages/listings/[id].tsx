@@ -57,6 +57,7 @@ export default function Listing() {
         }
 
         loadListing();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router.isReady])
 
     const copyToClipboard = () => {
