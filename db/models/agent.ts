@@ -23,12 +23,17 @@ const schema = new Schema({
         unique: true,
         length: 13
     },
-    listings: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Listing'
-        }
-    ]
+    role: {
+        type: String,
+        required: true,
+        default: 'USER'
+    },
+    // listings: [
+    //     {
+    //         type: Schema.Types.ObjectId,
+    //         ref: 'Listing'
+    //     }
+    // ]
 });
 
 schema.set('toJSON', {
@@ -37,6 +42,7 @@ schema.set('toJSON', {
         delete returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject.password;
+        delete returnedObject.role;
     },
 });
 

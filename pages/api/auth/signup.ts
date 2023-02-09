@@ -22,8 +22,8 @@ export default async function handler(
 
     try {
         const passwordHash = await bcrypt.hash(password, saltRounds);
-        const agent = new Agent({ username, fullname, password: passwordHash, phone });
-        await agent.save()
+        const agent = new Agent({ username, fullname, password: passwordHash, phone, role: 'USER' });
+        await agent.save();
         res.status(200).send({ message: 'Created' });
     } catch (error) {
         res.status(400).json({ error });

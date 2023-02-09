@@ -18,11 +18,13 @@ export default async function handler(
     switch (method) {
         case 'GET' /* Get agent by its ID */:
             try {
-                const agent = await Agent.findById(id).populate('listings', { name: 1, description: 1, address: 1, bathrooms: 1, bedrooms: 1, price: 1 });
+                // const agent = await Agent.findById(id).populate('listings', { name: 1, description: 1, address: 1, bathrooms: 1, bedrooms: 1, price: 1 });
+                const agent = await Agent.findById(id);
                 if (!agent) {
                     return res.status(400).json({ success: false });
                 }
-                res.status(200).json({ success: true, data: agent });
+                const listings = await Listing.find({ agentContact: agent.phone });
+                res.status(200).json({ data: { agent, listings } });
             } catch (error) {
                 res.status(400).json({ error });
             }
@@ -45,14 +47,15 @@ export default async function handler(
                 }
                 const agent = await Agent.findById(id);
                 if (!agent) {
-                    return res.status(400).json({ success: false });
+                    return res.status(400).json({ error: 'Agent missing' });
                 }
 
-                const listing = new Listing({ ...req.body, agent: id });
+                // const listing = new Listing({ ...req.body, agent: id });
+                const listing = new Listing({ ...req.body, agentContact: agent.phone });
                 await listing.save();
 
-                agent.listings = [...agent.listings, listing._id];
-                await agent.save();
+                // agent.listings = [...agent.listings, listing._id];
+                // await agent.save();
 
                 res.status(200).json({ success: true, data: listing });
             }
@@ -60,7 +63,7 @@ export default async function handler(
                 if (error?.message === 'jwt expired') {
                     return res.status(400).json({ error: 'token expired' });
                 }
-                res.status(400).json({ success: false });
+                res.status(400).json({ error });
             }
             break;
 

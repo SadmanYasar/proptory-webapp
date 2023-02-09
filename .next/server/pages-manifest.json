@@ -2,15 +2,5 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/agents/[id]": "pages/api/agents/[id].js",
-  "/api/auth/login": "pages/api/auth/login.js",
-  "/api/auth/signup": "pages/api/auth/signup.js",
-  "/agents/[id]": "pages/agents/[id].html",
-  "/api/listings/[id]": "pages/api/listings/[id].js",
-  "/api/listings": "pages/api/listings.js",
-  "/": "pages/index.html",
-  "/listings/[id]": "pages/listings/[id].html",
-  "/listings": "pages/listings.html",
-  "/listings/view3d/[id]": "pages/listings/view3d/[id].html",
-  "/404": "pages/404.html"
+  "/api/listings/[id]": "pages/api/listings/[id].js"
 }

@@ -1,189 +1,75 @@
 "use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 (() => {
 var exports = {};
-exports.id = 429;
-exports.ids = [429];
+exports.id = "pages/api/agents/[id]";
+exports.ids = ["pages/api/agents/[id]"];
 exports.modules = {
 
-/***/ 9344:
+/***/ "jsonwebtoken":
+/*!*******************************!*\
+  !*** external "jsonwebtoken" ***!
+  \*******************************/
 /***/ ((module) => {
 
 module.exports = require("jsonwebtoken");
 
 /***/ }),
 
-/***/ 1185:
+/***/ "mongoose":
+/*!***************************!*\
+  !*** external "mongoose" ***!
+  \***************************/
 /***/ ((module) => {
 
 module.exports = require("mongoose");
 
 /***/ }),
 
-/***/ 2333:
+/***/ "(api)/./db/connectDb.js":
+/*!*************************!*\
+  !*** ./db/connectDb.js ***!
+  \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1185);
-/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);
-
-const schema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true,
-        minlength: 3
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 5
-    },
-    fullname: {
-        type: String,
-        required: true,
-        minlength: 3
-    },
-    phone: {
-        type: String,
-        required: true,
-        unique: true,
-        length: 13
-    },
-    listings: [
-        {
-            type: mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema.Types.ObjectId,
-            ref: "Listing"
-        }
-    ]
-});
-schema.set("toJSON", {
-    transform: (document, returnedObject)=>{
-        returnedObject.id = returnedObject._id.toString();
-        delete returnedObject._id;
-        delete returnedObject.__v;
-        delete returnedObject.password;
-    }
-});
-const Agent = mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Agent || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)("Agent", schema);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Agent);
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\nconst MONGODB_URI = process.env.MONGO_URI;\nif (!MONGODB_URI) {\n    throw new Error(\"Please define the MONGODB_URI environment variable inside .env.local\");\n}\n/**\n * Global is used here to maintain a cached connection across hot reloads\n * in development. This prevents connections growing exponentially\n * during API Route usage.\n */ let cached = global.mongoose;\nif (!cached) {\n    cached = global.mongoose = {\n        conn: null,\n        promise: null\n    };\n}\nasync function connectDb() {\n    if (cached.conn) {\n        return cached.conn;\n    }\n    if (!cached.promise) {\n        const opts = {\n            bufferCommands: false\n        };\n        cached.promise = mongoose__WEBPACK_IMPORTED_MODULE_0___default().connect(MONGODB_URI, opts).then((mongoose)=>{\n            return mongoose;\n        });\n    }\n    try {\n        cached.conn = await cached.promise;\n    } catch (e) {\n        cached.promise = null;\n        throw e;\n    }\n    return cached.conn;\n}\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (connectDb);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9kYi9jb25uZWN0RGIuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQWdDO0FBRWhDLE1BQU1DLGNBQWNDLFFBQVFDLEdBQUcsQ0FBQ0MsU0FBUztBQUV6QyxJQUFJLENBQUNILGFBQWE7SUFDZCxNQUFNLElBQUlJLE1BQ04sd0VBQ0g7QUFDTCxDQUFDO0FBRUQ7Ozs7Q0FJQyxHQUNELElBQUlDLFNBQVNDLE9BQU9QLFFBQVE7QUFFNUIsSUFBSSxDQUFDTSxRQUFRO0lBQ1RBLFNBQVNDLE9BQU9QLFFBQVEsR0FBRztRQUFFUSxNQUFNLElBQUk7UUFBRUMsU0FBUyxJQUFJO0lBQUM7QUFDM0QsQ0FBQztBQUVELGVBQWVDLFlBQVk7SUFDdkIsSUFBSUosT0FBT0UsSUFBSSxFQUFFO1FBQ2IsT0FBT0YsT0FBT0UsSUFBSTtJQUN0QixDQUFDO0lBRUQsSUFBSSxDQUFDRixPQUFPRyxPQUFPLEVBQUU7UUFDakIsTUFBTUUsT0FBTztZQUNUQyxnQkFBZ0IsS0FBSztRQUN6QjtRQUVBTixPQUFPRyxPQUFPLEdBQUdULHVEQUFnQixDQUFDQyxhQUFhVSxNQUFNRyxJQUFJLENBQUMsQ0FBQ2QsV0FBYTtZQUNwRSxPQUFPQTtRQUNYO0lBQ0osQ0FBQztJQUVELElBQUk7UUFDQU0sT0FBT0UsSUFBSSxHQUFHLE1BQU1GLE9BQU9HLE9BQU87SUFDdEMsRUFBRSxPQUFPTSxHQUFHO1FBQ1JULE9BQU9HLE9BQU8sR0FBRyxJQUFJO1FBQ3JCLE1BQU1NLEVBQUM7SUFDWDtJQUVBLE9BQU9ULE9BQU9FLElBQUk7QUFDdEI7QUFFQSxpRUFBZUUsU0FBU0EsRUFBQSIsInNvdXJjZXMiOlsid2VicGFjazovL3Byb3B0b3J5LXdlYmFwcC8uL2RiL2Nvbm5lY3REYi5qcz81ZjJjIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBtb25nb29zZSBmcm9tICdtb25nb29zZSc7XG5cbmNvbnN0IE1PTkdPREJfVVJJID0gcHJvY2Vzcy5lbnYuTU9OR09fVVJJO1xuXG5pZiAoIU1PTkdPREJfVVJJKSB7XG4gICAgdGhyb3cgbmV3IEVycm9yKFxuICAgICAgICAnUGxlYXNlIGRlZmluZSB0aGUgTU9OR09EQl9VUkkgZW52aXJvbm1lbnQgdmFyaWFibGUgaW5zaWRlIC5lbnYubG9jYWwnXG4gICAgKVxufVxuXG4vKipcbiAqIEdsb2JhbCBpcyB1c2VkIGhlcmUgdG8gbWFpbnRhaW4gYSBjYWNoZWQgY29ubmVjdGlvbiBhY3Jvc3MgaG90IHJlbG9hZHNcbiAqIGluIGRldmVsb3BtZW50LiBUaGlzIHByZXZlbnRzIGNvbm5lY3Rpb25zIGdyb3dpbmcgZXhwb25lbnRpYWxseVxuICogZHVyaW5nIEFQSSBSb3V0ZSB1c2FnZS5cbiAqL1xubGV0IGNhY2hlZCA9IGdsb2JhbC5tb25nb29zZVxuXG5pZiAoIWNhY2hlZCkge1xuICAgIGNhY2hlZCA9IGdsb2JhbC5tb25nb29zZSA9IHsgY29ubjogbnVsbCwgcHJvbWlzZTogbnVsbCB9XG59XG5cbmFzeW5jIGZ1bmN0aW9uIGNvbm5lY3REYigpIHtcbiAgICBpZiAoY2FjaGVkLmNvbm4pIHtcbiAgICAgICAgcmV0dXJuIGNhY2hlZC5jb25uXG4gICAgfVxuXG4gICAgaWYgKCFjYWNoZWQucHJvbWlzZSkge1xuICAgICAgICBjb25zdCBvcHRzID0ge1xuICAgICAgICAgICAgYnVmZmVyQ29tbWFuZHM6IGZhbHNlLFxuICAgICAgICB9XG5cbiAgICAgICAgY2FjaGVkLnByb21pc2UgPSBtb25nb29zZS5jb25uZWN0KE1PTkdPREJfVVJJLCBvcHRzKS50aGVuKChtb25nb29zZSkgPT4ge1xuICAgICAgICAgICAgcmV0dXJuIG1vbmdvb3NlXG4gICAgICAgIH0pXG4gICAgfVxuXG4gICAgdHJ5IHtcbiAgICAgICAgY2FjaGVkLmNvbm4gPSBhd2FpdCBjYWNoZWQucHJvbWlzZVxuICAgIH0gY2F0Y2ggKGUpIHtcbiAgICAgICAgY2FjaGVkLnByb21pc2UgPSBudWxsXG4gICAgICAgIHRocm93IGVcbiAgICB9XG5cbiAgICByZXR1cm4gY2FjaGVkLmNvbm5cbn1cblxuZXhwb3J0IGRlZmF1bHQgY29ubmVjdERiIl0sIm5hbWVzIjpbIm1vbmdvb3NlIiwiTU9OR09EQl9VUkkiLCJwcm9jZXNzIiwiZW52IiwiTU9OR09fVVJJIiwiRXJyb3IiLCJjYWNoZWQiLCJnbG9iYWwiLCJjb25uIiwicHJvbWlzZSIsImNvbm5lY3REYiIsIm9wdHMiLCJidWZmZXJDb21tYW5kcyIsImNvbm5lY3QiLCJ0aGVuIiwiZSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./db/connectDb.js\n");
 
 /***/ }),
 
-/***/ 6110:
+/***/ "(api)/./db/models/agent.ts":
+/*!****************************!*\
+  !*** ./db/models/agent.ts ***!
+  \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ handler)
-/* harmony export */ });
-/* harmony import */ var _db_connectDb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8401);
-/* harmony import */ var _db_models_agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2333);
-/* harmony import */ var _db_models_listing__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3492);
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(9344);
-/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__);
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\nconst schema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({\n    username: {\n        type: String,\n        required: true,\n        unique: true,\n        minlength: 3\n    },\n    password: {\n        type: String,\n        required: true,\n        minlength: 5\n    },\n    fullname: {\n        type: String,\n        required: true,\n        minlength: 3\n    },\n    phone: {\n        type: String,\n        required: true,\n        unique: true,\n        length: 13\n    },\n    role: {\n        type: String,\n        required: true,\n        default: \"USER\"\n    }\n});\nschema.set(\"toJSON\", {\n    transform: (document, returnedObject)=>{\n        returnedObject.id = returnedObject._id.toString();\n        delete returnedObject._id;\n        delete returnedObject.__v;\n        delete returnedObject.password;\n        delete returnedObject.role;\n    }\n});\nconst Agent = mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Agent || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)(\"Agent\", schema);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Agent);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9kYi9tb2RlbHMvYWdlbnQudHMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQWlEO0FBRWpELE1BQU1HLFNBQVMsSUFBSUQsNENBQU1BLENBQUM7SUFDdEJFLFVBQVU7UUFDTkMsTUFBTUM7UUFDTkMsVUFBVSxJQUFJO1FBQ2RDLFFBQVEsSUFBSTtRQUNaQyxXQUFXO0lBQ2Y7SUFDQUMsVUFBVTtRQUNOTCxNQUFNQztRQUNOQyxVQUFVLElBQUk7UUFDZEUsV0FBVztJQUNmO0lBQ0FFLFVBQVU7UUFDTk4sTUFBTUM7UUFDTkMsVUFBVSxJQUFJO1FBQ2RFLFdBQVc7SUFDZjtJQUNBRyxPQUFPO1FBQ0hQLE1BQU1DO1FBQ05DLFVBQVUsSUFBSTtRQUNkQyxRQUFRLElBQUk7UUFDWkssUUFBUTtJQUNaO0lBQ0FDLE1BQU07UUFDRlQsTUFBTUM7UUFDTkMsVUFBVSxJQUFJO1FBQ2RRLFNBQVM7SUFDYjtBQU9KO0FBRUFaLE9BQU9hLEdBQUcsQ0FBQyxVQUFVO0lBQ2pCQyxXQUFXLENBQUNDLFVBQVVDLGlCQUFtQjtRQUNyQ0EsZUFBZUMsRUFBRSxHQUFHRCxlQUFlRSxHQUFHLENBQUNDLFFBQVE7UUFDL0MsT0FBT0gsZUFBZUUsR0FBRztRQUN6QixPQUFPRixlQUFlSSxHQUFHO1FBQ3pCLE9BQU9KLGVBQWVULFFBQVE7UUFDOUIsT0FBT1MsZUFBZUwsSUFBSTtJQUM5QjtBQUNKO0FBRUEsTUFBTVUsUUFBUXZCLGtEQUFZLElBQUlELCtDQUFLQSxDQUFDLFNBQVNHO0FBRTdDLGlFQUFlcUIsS0FBS0EsRUFBQyIsInNvdXJjZXMiOlsid2VicGFjazovL3Byb3B0b3J5LXdlYmFwcC8uL2RiL21vZGVscy9hZ2VudC50cz80ZDMxIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IG1vZGVsLCBtb2RlbHMsIFNjaGVtYSB9IGZyb20gXCJtb25nb29zZVwiO1xuXG5jb25zdCBzY2hlbWEgPSBuZXcgU2NoZW1hKHtcbiAgICB1c2VybmFtZToge1xuICAgICAgICB0eXBlOiBTdHJpbmcsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlLFxuICAgICAgICB1bmlxdWU6IHRydWUsXG4gICAgICAgIG1pbmxlbmd0aDogM1xuICAgIH0sXG4gICAgcGFzc3dvcmQ6IHtcbiAgICAgICAgdHlwZTogU3RyaW5nLFxuICAgICAgICByZXF1aXJlZDogdHJ1ZSxcbiAgICAgICAgbWlubGVuZ3RoOiA1XG4gICAgfSxcbiAgICBmdWxsbmFtZToge1xuICAgICAgICB0eXBlOiBTdHJpbmcsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlLFxuICAgICAgICBtaW5sZW5ndGg6IDNcbiAgICB9LFxuICAgIHBob25lOiB7XG4gICAgICAgIHR5cGU6IFN0cmluZyxcbiAgICAgICAgcmVxdWlyZWQ6IHRydWUsXG4gICAgICAgIHVuaXF1ZTogdHJ1ZSxcbiAgICAgICAgbGVuZ3RoOiAxM1xuICAgIH0sXG4gICAgcm9sZToge1xuICAgICAgICB0eXBlOiBTdHJpbmcsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlLFxuICAgICAgICBkZWZhdWx0OiAnVVNFUidcbiAgICB9LFxuICAgIC8vIGxpc3RpbmdzOiBbXG4gICAgLy8gICAgIHtcbiAgICAvLyAgICAgICAgIHR5cGU6IFNjaGVtYS5UeXBlcy5PYmplY3RJZCxcbiAgICAvLyAgICAgICAgIHJlZjogJ0xpc3RpbmcnXG4gICAgLy8gICAgIH1cbiAgICAvLyBdXG59KTtcblxuc2NoZW1hLnNldCgndG9KU09OJywge1xuICAgIHRyYW5zZm9ybTogKGRvY3VtZW50LCByZXR1cm5lZE9iamVjdCkgPT4ge1xuICAgICAgICByZXR1cm5lZE9iamVjdC5pZCA9IHJldHVybmVkT2JqZWN0Ll9pZC50b1N0cmluZygpO1xuICAgICAgICBkZWxldGUgcmV0dXJuZWRPYmplY3QuX2lkO1xuICAgICAgICBkZWxldGUgcmV0dXJuZWRPYmplY3QuX192O1xuICAgICAgICBkZWxldGUgcmV0dXJuZWRPYmplY3QucGFzc3dvcmQ7XG4gICAgICAgIGRlbGV0ZSByZXR1cm5lZE9iamVjdC5yb2xlO1xuICAgIH0sXG59KTtcblxuY29uc3QgQWdlbnQgPSBtb2RlbHMuQWdlbnQgfHwgbW9kZWwoJ0FnZW50Jywgc2NoZW1hKTtcblxuZXhwb3J0IGRlZmF1bHQgQWdlbnQ7Il0sIm5hbWVzIjpbIm1vZGVsIiwibW9kZWxzIiwiU2NoZW1hIiwic2NoZW1hIiwidXNlcm5hbWUiLCJ0eXBlIiwiU3RyaW5nIiwicmVxdWlyZWQiLCJ1bmlxdWUiLCJtaW5sZW5ndGgiLCJwYXNzd29yZCIsImZ1bGxuYW1lIiwicGhvbmUiLCJsZW5ndGgiLCJyb2xlIiwiZGVmYXVsdCIsInNldCIsInRyYW5zZm9ybSIsImRvY3VtZW50IiwicmV0dXJuZWRPYmplY3QiLCJpZCIsIl9pZCIsInRvU3RyaW5nIiwiX192IiwiQWdlbnQiXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./db/models/agent.ts\n");
 
+/***/ }),
 
+/***/ "(api)/./db/models/listing.ts":
+/*!******************************!*\
+  !*** ./db/models/listing.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! mongoose */ \"mongoose\");\n/* harmony import */ var mongoose__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(mongoose__WEBPACK_IMPORTED_MODULE_0__);\n\nconst schema = new mongoose__WEBPACK_IMPORTED_MODULE_0__.Schema({\n    // agent: {\n    //     type: Schema.Types.ObjectId,\n    //     ref: 'Agent'\n    // },\n    agentContact: {\n        type: String,\n        required: true,\n        minlength: 13\n    },\n    matterportId: {\n        type: String,\n        required: true,\n        minlength: 5\n    },\n    name: {\n        type: String,\n        required: true,\n        minlength: 5\n    },\n    description: {\n        type: String,\n        required: true,\n        minlength: 10\n    },\n    address: {\n        type: String,\n        required: true,\n        minlength: 10\n    },\n    bathrooms: {\n        type: Number,\n        required: true\n    },\n    bedrooms: {\n        type: Number,\n        required: true\n    },\n    price: {\n        type: Number,\n        required: true\n    }\n});\nschema.set(\"toJSON\", {\n    transform: (document, returnedObject)=>{\n        returnedObject.id = returnedObject._id.toString();\n        delete returnedObject._id;\n        delete returnedObject.__v;\n    }\n});\nconst Listing = mongoose__WEBPACK_IMPORTED_MODULE_0__.models.Listing || (0,mongoose__WEBPACK_IMPORTED_MODULE_0__.model)(\"Listing\", schema);\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Listing);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9kYi9tb2RlbHMvbGlzdGluZy50cy5qcyIsIm1hcHBpbmdzIjoiOzs7Ozs7QUFBaUQ7QUFFakQsTUFBTUcsU0FBUyxJQUFJRCw0Q0FBTUEsQ0FBQztJQUN0QixXQUFXO0lBQ1gsbUNBQW1DO0lBQ25DLG1CQUFtQjtJQUNuQixLQUFLO0lBQ0xFLGNBQWM7UUFDVkMsTUFBTUM7UUFDTkMsVUFBVSxJQUFJO1FBQ2RDLFdBQVc7SUFDZjtJQUNBQyxjQUFjO1FBQ1ZKLE1BQU1DO1FBQ05DLFVBQVUsSUFBSTtRQUNkQyxXQUFXO0lBQ2Y7SUFDQUUsTUFBTTtRQUNGTCxNQUFNQztRQUNOQyxVQUFVLElBQUk7UUFDZEMsV0FBVztJQUNmO0lBQ0FHLGFBQWE7UUFDVE4sTUFBTUM7UUFDTkMsVUFBVSxJQUFJO1FBQ2RDLFdBQVc7SUFDZjtJQUNBSSxTQUFTO1FBQ0xQLE1BQU1DO1FBQ05DLFVBQVUsSUFBSTtRQUNkQyxXQUFXO0lBQ2Y7SUFDQUssV0FBVztRQUNQUixNQUFNUztRQUNOUCxVQUFVLElBQUk7SUFDbEI7SUFDQVEsVUFBVTtRQUNOVixNQUFNUztRQUNOUCxVQUFVLElBQUk7SUFDbEI7SUFDQVMsT0FBTztRQUNIWCxNQUFNUztRQUNOUCxVQUFVLElBQUk7SUFDbEI7QUFDSjtBQUVBSixPQUFPYyxHQUFHLENBQUMsVUFBVTtJQUNqQkMsV0FBVyxDQUFDQyxVQUFVQyxpQkFBbUI7UUFDckNBLGVBQWVDLEVBQUUsR0FBR0QsZUFBZUUsR0FBRyxDQUFDQyxRQUFRO1FBQy9DLE9BQU9ILGVBQWVFLEdBQUc7UUFDekIsT0FBT0YsZUFBZUksR0FBRztJQUM3QjtBQUNKO0FBRUEsTUFBTUMsVUFBVXhCLG9EQUFjLElBQUlELCtDQUFLQSxDQUFDLFdBQVdHO0FBRW5ELGlFQUFlc0IsT0FBT0EsRUFBQyIsInNvdXJjZXMiOlsid2VicGFjazovL3Byb3B0b3J5LXdlYmFwcC8uL2RiL21vZGVscy9saXN0aW5nLnRzPzZiYzQiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgbW9kZWwsIG1vZGVscywgU2NoZW1hIH0gZnJvbSBcIm1vbmdvb3NlXCI7XG5cbmNvbnN0IHNjaGVtYSA9IG5ldyBTY2hlbWEoe1xuICAgIC8vIGFnZW50OiB7XG4gICAgLy8gICAgIHR5cGU6IFNjaGVtYS5UeXBlcy5PYmplY3RJZCxcbiAgICAvLyAgICAgcmVmOiAnQWdlbnQnXG4gICAgLy8gfSxcbiAgICBhZ2VudENvbnRhY3Q6IHtcbiAgICAgICAgdHlwZTogU3RyaW5nLFxuICAgICAgICByZXF1aXJlZDogdHJ1ZSxcbiAgICAgICAgbWlubGVuZ3RoOiAxMyxcbiAgICB9LFxuICAgIG1hdHRlcnBvcnRJZDoge1xuICAgICAgICB0eXBlOiBTdHJpbmcsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlLFxuICAgICAgICBtaW5sZW5ndGg6IDVcbiAgICB9LFxuICAgIG5hbWU6IHtcbiAgICAgICAgdHlwZTogU3RyaW5nLFxuICAgICAgICByZXF1aXJlZDogdHJ1ZSxcbiAgICAgICAgbWlubGVuZ3RoOiA1XG4gICAgfSxcbiAgICBkZXNjcmlwdGlvbjoge1xuICAgICAgICB0eXBlOiBTdHJpbmcsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlLFxuICAgICAgICBtaW5sZW5ndGg6IDEwXG4gICAgfSxcbiAgICBhZGRyZXNzOiB7XG4gICAgICAgIHR5cGU6IFN0cmluZyxcbiAgICAgICAgcmVxdWlyZWQ6IHRydWUsXG4gICAgICAgIG1pbmxlbmd0aDogMTBcbiAgICB9LFxuICAgIGJhdGhyb29tczoge1xuICAgICAgICB0eXBlOiBOdW1iZXIsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlXG4gICAgfSxcbiAgICBiZWRyb29tczoge1xuICAgICAgICB0eXBlOiBOdW1iZXIsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlXG4gICAgfSxcbiAgICBwcmljZToge1xuICAgICAgICB0eXBlOiBOdW1iZXIsXG4gICAgICAgIHJlcXVpcmVkOiB0cnVlXG4gICAgfVxufSk7XG5cbnNjaGVtYS5zZXQoJ3RvSlNPTicsIHtcbiAgICB0cmFuc2Zvcm06IChkb2N1bWVudCwgcmV0dXJuZWRPYmplY3QpID0+IHtcbiAgICAgICAgcmV0dXJuZWRPYmplY3QuaWQgPSByZXR1cm5lZE9iamVjdC5faWQudG9TdHJpbmcoKTtcbiAgICAgICAgZGVsZXRlIHJldHVybmVkT2JqZWN0Ll9pZDtcbiAgICAgICAgZGVsZXRlIHJldHVybmVkT2JqZWN0Ll9fdjtcbiAgICB9LFxufSk7XG5cbmNvbnN0IExpc3RpbmcgPSBtb2RlbHMuTGlzdGluZyB8fCBtb2RlbCgnTGlzdGluZycsIHNjaGVtYSk7XG5cbmV4cG9ydCBkZWZhdWx0IExpc3Rpbmc7Il0sIm5hbWVzIjpbIm1vZGVsIiwibW9kZWxzIiwiU2NoZW1hIiwic2NoZW1hIiwiYWdlbnRDb250YWN0IiwidHlwZSIsIlN0cmluZyIsInJlcXVpcmVkIiwibWlubGVuZ3RoIiwibWF0dGVycG9ydElkIiwibmFtZSIsImRlc2NyaXB0aW9uIiwiYWRkcmVzcyIsImJhdGhyb29tcyIsIk51bWJlciIsImJlZHJvb21zIiwicHJpY2UiLCJzZXQiLCJ0cmFuc2Zvcm0iLCJkb2N1bWVudCIsInJldHVybmVkT2JqZWN0IiwiaWQiLCJfaWQiLCJ0b1N0cmluZyIsIl9fdiIsIkxpc3RpbmciXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(api)/./db/models/listing.ts\n");
 
-async function handler(req, res) {
-    const { query: { id  } , method , headers: { authorization  }  } = req;
-    await (0,_db_connectDb__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .Z)();
-    switch(method){
-        case "GET" /* Get agent by its ID */ :
-            try {
-                const agent = await _db_models_agent__WEBPACK_IMPORTED_MODULE_1__/* ["default"].findById */ .Z.findById(id).populate("listings", {
-                    name: 1,
-                    description: 1,
-                    address: 1,
-                    bathrooms: 1,
-                    bedrooms: 1,
-                    price: 1
-                });
-                if (!agent) {
-                    return res.status(400).json({
-                        success: false
-                    });
-                }
-                res.status(200).json({
-                    success: true,
-                    data: agent
-                });
-            } catch (error) {
-                res.status(400).json({
-                    error
-                });
-            }
-            break;
-        case "POST" /* Post a model by its ID */ :
-            let token;
-            if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
-                token = authorization.substring(7);
-            }
-            if (!token) {
-                return res.status(401).json({
-                    error: "token missing"
-                });
-            }
-            try {
-                const decodedToken = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3___default().verify(token, process.env.JWT_SECRET);
-                if (!decodedToken.id) {
-                    return res.status(401).json({
-                        error: "token invalid"
-                    });
-                }
-                const agent = await _db_models_agent__WEBPACK_IMPORTED_MODULE_1__/* ["default"].findById */ .Z.findById(id);
-                if (!agent) {
-                    return res.status(400).json({
-                        success: false
-                    });
-                }
-                const listing = new _db_models_listing__WEBPACK_IMPORTED_MODULE_2__/* ["default"] */ .Z({
-                    ...req.body,
-                    agent: id
-                });
-                await listing.save();
-                agent.listings = [
-                    ...agent.listings,
-                    listing._id
-                ];
-                await agent.save();
-                res.status(200).json({
-                    success: true,
-                    data: listing
-                });
-            } catch (error) {
-                if (error?.message === "jwt expired") {
-                    return res.status(400).json({
-                        error: "token expired"
-                    });
-                }
-                res.status(400).json({
-                    success: false
-                });
-            }
-            break;
-        // case 'DELETE' /* Delete a model by its ID */:
-        //     try {
-        //         const deletedPet = await Pet.deleteOne({ _id: id })
-        //         if (!deletedPet) {
-        //             return res.status(400).json({ success: false })
-        //         }
-        //         res.status(200).json({ success: true, data: {} })
-        //     } catch (error) {
-        //         res.status(400).json({ success: false })
-        //     }
-        //     break
-        default:
-            res.status(400).json({
-                success: false
-            });
-            break;
-    }
-}
+/***/ }),
 
+/***/ "(api)/./pages/api/agents/[id].ts":
+/*!**********************************!*\
+  !*** ./pages/api/agents/[id].ts ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ handler)\n/* harmony export */ });\n/* harmony import */ var _db_connectDb__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/db/connectDb */ \"(api)/./db/connectDb.js\");\n/* harmony import */ var _db_models_agent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/db/models/agent */ \"(api)/./db/models/agent.ts\");\n/* harmony import */ var _db_models_listing__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/db/models/listing */ \"(api)/./db/models/listing.ts\");\n/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jsonwebtoken */ \"jsonwebtoken\");\n/* harmony import */ var jsonwebtoken__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jsonwebtoken__WEBPACK_IMPORTED_MODULE_3__);\n\n\n\n\nasync function handler(req, res) {\n    const { query: { id  } , method , headers: { authorization  }  } = req;\n    await (0,_db_connectDb__WEBPACK_IMPORTED_MODULE_0__[\"default\"])();\n    switch(method){\n        case \"GET\" /* Get agent by its ID */ :\n            try {\n                // const agent = await Agent.findById(id).populate('listings', { name: 1, description: 1, address: 1, bathrooms: 1, bedrooms: 1, price: 1 });\n                const agent = await _db_models_agent__WEBPACK_IMPORTED_MODULE_1__[\"default\"].findById(id);\n                if (!agent) {\n                    return res.status(400).json({\n                        success: false\n                    });\n                }\n                const listings = await _db_models_listing__WEBPACK_IMPORTED_MODULE_2__[\"default\"].find({\n                    agentContact: agent.phone\n                });\n                res.status(200).json({\n                    data: {\n                        agent,\n                        listings\n                    }\n                });\n            } catch (error) {\n                res.status(400).json({\n                    error\n                });\n            }\n            break;\n        case \"POST\" /* Post a model by its ID */ :\n            let token;\n            if (authorization && authorization.toLowerCase().startsWith(\"bearer \")) {\n                token = authorization.substring(7);\n            }\n            if (!token) {\n                return res.status(401).json({\n                    error: \"token missing\"\n                });\n            }\n            try {\n                const decodedToken = jsonwebtoken__WEBPACK_IMPORTED_MODULE_3___default().verify(token, process.env.JWT_SECRET);\n                if (!decodedToken.id) {\n                    return res.status(401).json({\n                        error: \"token invalid\"\n                    });\n                }\n                const agent = await _db_models_agent__WEBPACK_IMPORTED_MODULE_1__[\"default\"].findById(id);\n                if (!agent) {\n                    return res.status(400).json({\n                        error: \"Agent missing\"\n                    });\n                }\n                // const listing = new Listing({ ...req.body, agent: id });\n                const listing = new _db_models_listing__WEBPACK_IMPORTED_MODULE_2__[\"default\"]({\n                    ...req.body,\n                    agentContact: agent.phone\n                });\n                await listing.save();\n                // agent.listings = [...agent.listings, listing._id];\n                // await agent.save();\n                res.status(200).json({\n                    success: true,\n                    data: listing\n                });\n            } catch (error) {\n                if (error?.message === \"jwt expired\") {\n                    return res.status(400).json({\n                        error: \"token expired\"\n                    });\n                }\n                res.status(400).json({\n                    error\n                });\n            }\n            break;\n        // case 'DELETE' /* Delete a model by its ID */:\n        //     try {\n        //         const deletedPet = await Pet.deleteOne({ _id: id })\n        //         if (!deletedPet) {\n        //             return res.status(400).json({ success: false })\n        //         }\n        //         res.status(200).json({ success: true, data: {} })\n        //     } catch (error) {\n        //         res.status(400).json({ success: false })\n        //     }\n        //     break\n        default:\n            res.status(400).json({\n                success: false\n            });\n            break;\n    }\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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QUMsS0FBS0MsSUFBSSxDQUFDO2dCQUFFQyxTQUFTLEtBQUs7WUFBQztZQUN0QyxLQUFLO0lBQ2I7QUFDSixDQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vcHJvcHRvcnktd2ViYXBwLy4vcGFnZXMvYXBpL2FnZW50cy9baWRdLnRzPzMxMTAiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHR5cGUgeyBOZXh0QXBpUmVxdWVzdCwgTmV4dEFwaVJlc3BvbnNlIH0gZnJvbSAnbmV4dCc7XG5pbXBvcnQgY29ubmVjdERiIGZyb20gJ0AvZGIvY29ubmVjdERiJztcbmltcG9ydCBBZ2VudCBmcm9tICdAL2RiL21vZGVscy9hZ2VudCc7XG5pbXBvcnQgTGlzdGluZyBmcm9tICdAL2RiL21vZGVscy9saXN0aW5nJztcbmltcG9ydCBqd3QgZnJvbSAnanNvbndlYnRva2VuJztcblxuZXhwb3J0IGRlZmF1bHQgYXN5bmMgZnVuY3Rpb24gaGFuZGxlcihcbiAgICByZXE6IE5leHRBcGlSZXF1ZXN0LFxuICAgIHJlczogTmV4dEFwaVJlc3BvbnNlXG4pIHtcbiAgICBjb25zdCB7XG4gICAgICAgIHF1ZXJ5OiB7IGlkIH0sXG4gICAgICAgIG1ldGhvZCxcbiAgICAgICAgaGVhZGVyczogeyBhdXRob3JpemF0aW9uIH1cbiAgICB9ID0gcmVxO1xuICAgIGF3YWl0IGNvbm5lY3REYigpO1xuXG4gICAgc3dpdGNoIChtZXRob2QpIHtcbiAgICAgICAgY2FzZSAnR0VUJyAvKiBHZXQgYWdlbnQgYnkgaXRzIElEICovOlxuICAgICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgICAgICAvLyBjb25zdCBhZ2VudCA9IGF3YWl0IEFnZW50LmZpbmRCeUlkKGlkKS5wb3B1bGF0ZSgnbGlzdGluZ3MnLCB7IG5hbWU6IDEsIGRlc2NyaXB0aW9uOiAxLCBhZGRyZXNzOiAxLCBiYXRocm9vbXM6IDEsIGJlZHJvb21zOiAxLCBwcmljZTogMSB9KTtcbiAgICAgICAgICAgICAgICBjb25zdCBhZ2VudCA9IGF3YWl0IEFnZW50LmZpbmRCeUlkKGlkKTtcbiAgICAgICAgICAgICAgICBpZiAoIWFnZW50KSB7XG4gICAgICAgICAgICAgICAgICAgIHJldHVybiByZXMuc3RhdHVzKDQwMCkuanNvbih7IHN1Y2Nlc3M6IGZhbHNlIH0pO1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICBjb25zdCBsaXN0aW5ncyA9IGF3YWl0IExpc3RpbmcuZmluZCh7IGFnZW50Q29udGFjdDogYWdlbnQucGhvbmUgfSk7XG4gICAgICAgICAgICAgICAgcmVzLnN0YXR1cygyMDApLmpzb24oeyBkYXRhOiB7IGFnZW50LCBsaXN0aW5ncyB9IH0pO1xuICAgICAgICAgICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgICAgICAgICAgICByZXMuc3RhdHVzKDQwMCkuanNvbih7IGVycm9yIH0pO1xuICAgICAgICAgICAgfVxuICAgICAgICAgICAgYnJlYWs7XG5cbiAgICAgICAgY2FzZSAnUE9TVCcgLyogUG9zdCBhIG1vZGVsIGJ5IGl0cyBJRCAqLzpcbiAgICAgICAgICAgIGxldCB0b2tlbjtcbiAgICAgICAgICAgIGlmIChhdXRob3JpemF0aW9uICYmIGF1dGhvcml6YXRpb24udG9Mb3dlckNhc2UoKS5zdGFydHNXaXRoKCdiZWFyZXIgJykpIHtcbiAgICAgICAgICAgICAgICB0b2tlbiA9IGF1dGhvcml6YXRpb24uc3Vic3RyaW5nKDcpO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBpZiAoIXRva2VuKSB7XG4gICAgICAgICAgICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAxKS5qc29uKHsgZXJyb3I6ICd0b2tlbiBtaXNzaW5nJyB9KTtcbiAgICAgICAgICAgIH1cblxuICAgICAgICAgICAgdHJ5IHtcbiAgICAgICAgICAgICAgICBjb25zdCBkZWNvZGVkVG9rZW46IGFueSA9IGp3dC52ZXJpZnkodG9rZW4sIHByb2Nlc3MuZW52LkpXVF9TRUNSRVQhKTtcbiAgICAgICAgICAgICAgICBpZiAoIWRlY29kZWRUb2tlbi5pZCkge1xuICAgICAgICAgICAgICAgICAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDEpLmpzb24oeyBlcnJvcjogJ3Rva2VuIGludmFsaWQnIH0pO1xuICAgICAgICAgICAgICAgIH1cbiAgICAgICAgICAgICAgICBjb25zdCBhZ2VudCA9IGF3YWl0IEFnZW50LmZpbmRCeUlkKGlkKTtcbiAgICAgICAgICAgICAgICBpZiAoIWFnZW50KSB7XG4gICAgICAgICAgICAgICAgICAgIHJldHVybiByZXMuc3RhdHVzKDQwMCkuanNvbih7IGVycm9yOiAnQWdlbnQgbWlzc2luZycgfSk7XG4gICAgICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICAgICAgLy8gY29uc3QgbGlzdGluZyA9IG5ldyBMaXN0aW5nKHsgLi4ucmVxLmJvZHksIGFnZW50OiBpZCB9KTtcbiAgICAgICAgICAgICAgICBjb25zdCBsaXN0aW5nID0gbmV3IExpc3RpbmcoeyAuLi5yZXEuYm9keSwgYWdlbnRDb250YWN0OiBhZ2VudC5waG9uZSB9KTtcbiAgICAgICAgICAgICAgICBhd2FpdCBsaXN0aW5nLnNhdmUoKTtcblxuICAgICAgICAgICAgICAgIC8vIGFnZW50Lmxpc3RpbmdzID0gWy4uLmFnZW50Lmxpc3RpbmdzLCBsaXN0aW5nLl9pZF07XG4gICAgICAgICAgICAgICAgLy8gYXdhaXQgYWdlbnQuc2F2ZSgpO1xuXG4gICAgICAgICAgICAgICAgcmVzLnN0YXR1cygyMDApLmpzb24oeyBzdWNjZXNzOiB0cnVlLCBkYXRhOiBsaXN0aW5nIH0pO1xuICAgICAgICAgICAgfVxuICAgICAgICAgICAgY2F0Y2ggKGVycm9yOiBhbnkpIHtcbiAgICAgICAgICAgICAgICBpZiAoZXJyb3I/Lm1lc3NhZ2UgPT09ICdqd3QgZXhwaXJlZCcpIHtcbiAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAwKS5qc29uKHsgZXJyb3I6ICd0b2tlbiBleHBpcmVkJyB9KTtcbiAgICAgICAgICAgICAgICB9XG4gICAgICAgICAgICAgICAgcmVzLnN0YXR1cyg0MDApLmpzb24oeyBlcnJvciB9KTtcbiAgICAgICAgICAgIH1cbiAgICAgICAgICAgIGJyZWFrO1xuXG4gICAgICAgIC8vIGNhc2UgJ0RFTEVURScgLyogRGVsZXRlIGEgbW9kZWwgYnkgaXRzIElEICovOlxuICAgICAgICAvLyAgICAgdHJ5IHtcbiAgICAgICAgLy8gICAgICAgICBjb25zdCBkZWxldGVkUGV0ID0gYXdhaXQgUGV0LmRlbGV0ZU9uZSh7IF9pZDogaWQgfSlcbiAgICAgICAgLy8gICAgICAgICBpZiAoIWRlbGV0ZWRQZXQpIHtcbiAgICAgICAgLy8gICAgICAgICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAwKS5qc29uKHsgc3VjY2VzczogZmFsc2UgfSlcbiAgICAgICAgLy8gICAgICAgICB9XG4gICAgICAgIC8vICAgICAgICAgcmVzLnN0YXR1cygyMDApLmpzb24oeyBzdWNjZXNzOiB0cnVlLCBkYXRhOiB7fSB9KVxuICAgICAgICAvLyAgICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgICAgLy8gICAgICAgICByZXMuc3RhdHVzKDQwMCkuanNvbih7IHN1Y2Nlc3M6IGZhbHNlIH0pXG4gICAgICAgIC8vICAgICB9XG4gICAgICAgIC8vICAgICBicmVha1xuXG4gICAgICAgIGRlZmF1bHQ6XG4gICAgICAgICAgICByZXMuc3RhdHVzKDQwMCkuanNvbih7IHN1Y2Nlc3M6IGZhbHNlIH0pXG4gICAgICAgICAgICBicmVha1xuICAgIH1cbn1cbiJdLCJuYW1lcyI6WyJjb25uZWN0RGIiLCJBZ2VudCIsIkxpc3RpbmciLCJqd3QiLCJoYW5kbGVyIiwicmVxIiwicmVzIiwicXVlcnkiLCJpZCIsIm1ldGhvZCIsImhlYWRlcnMiLCJhdXRob3JpemF0aW9uIiwiYWdlbnQiLCJmaW5kQnlJZCIsInN0YXR1cyIsImpzb24iLCJzdWNjZXNzIiwibGlzdGluZ3MiLCJmaW5kIiwiYWdlbnRDb250YWN0IiwicGhvbmUiLCJkYXRhIiwiZXJyb3IiLCJ0b2tlbiIsInRvTG93ZXJDYXNlIiwic3RhcnRzV2l0aCIsInN1YnN0cmluZyIsImRlY29kZWRUb2tlbiIsInZlcmlmeSIsInByb2Nlc3MiLCJlbnYiLCJKV1RfU0VDUkVUIiwibGlzdGluZyIsImJvZHkiLCJzYXZlIiwibWVzc2FnZSJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./pages/api/agents/[id].ts\n");
 
 /***/ })
 
@@ -194,7 +80,7 @@ async function handler(req, res) {
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = __webpack_require__.X(0, [401,492], () => (__webpack_exec__(6110)));
+var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/agents/[id].ts"));
 module.exports = __webpack_exports__;
 
 })();

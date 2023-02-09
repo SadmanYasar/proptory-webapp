@@ -20,8 +20,12 @@ export interface Agent {
 }
 
 interface Data {
-    id: string;
-    fullname: string;
+    agent: {
+        fullname: string;
+        id: string;
+        phone: string;
+        username: string;
+    }
     listings: ListingDetailed[];
 }
 
@@ -80,8 +84,8 @@ export default function AgentProfile() {
             <Head>
                 <title>Agent Profile</title>
             </Head>
-            <div className={`text-black text-3xl py-4 px-12 ${data?.data?.fullname ? '' : 'hidden'}`}>{`${data?.data?.fullname}'s listings`}</div>
-            <div className='w-full grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1'>
+            <div className={`text-black text-3xl py-4 px-12 ${data?.data?.agent?.fullname ? '' : 'hidden'}`}>{`${data?.data?.agent?.fullname}'s listings`}</div>
+            <div className='w-full grid lg:grid-cols-3 md:grid-cols-2'>
                 {data?.data?.listings?.map((listing) =>
                     <Card key={listing.id} data={listing} />
                 )}

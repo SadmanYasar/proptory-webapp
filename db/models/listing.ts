@@ -1,9 +1,14 @@
 import { model, models, Schema } from "mongoose";
 
 const schema = new Schema({
-    agent: {
-        type: Schema.Types.ObjectId,
-        ref: 'Agent'
+    // agent: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Agent'
+    // },
+    agentContact: {
+        type: String,
+        required: true,
+        minlength: 13,
     },
     matterportId: {
         type: String,
