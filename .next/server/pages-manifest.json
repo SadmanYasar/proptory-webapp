@@ -2,5 +2,12 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/api/agents/[id]": "pages/api/agents/[id].js",
+  "/agents/[id]": "pages/agents/[id].js",
+  "/": "pages/index.js",
+  "/listings": "pages/listings.js",
+  "/api/auth/login": "pages/api/auth/login.js",
+  "/api/listings": "pages/api/listings.js",
+  "/listings/[id]": "pages/listings/[id].js",
   "/api/listings/[id]": "pages/api/listings/[id].js"
 }
